@@ -63,7 +63,7 @@ def _validate(
     metadata_version: Annotated[
         ai4_metadata.MetadataVersions,
         typer.Option(help="AI4 application metadata version."),
-    ] = ai4_metadata.get_latest_version().value,
+    ] = ai4_metadata.get_latest_version(),
     quiet: Annotated[
         bool, typer.Option("--quiet", "-q", help="Suppress output for valid instances.")
     ] = False,
@@ -110,7 +110,7 @@ def _generate(
     metadata_version: Annotated[
         ai4_metadata.MetadataVersions,
         typer.Option(help="AI4 application metadata version."),
-    ] = ai4_metadata.get_latest_version().value,
+    ] = ai4_metadata.get_latest_version(),
     sample_values: Annotated[
         bool, typer.Option("--sample-values", help="Generate sample values.")
     ] = False,

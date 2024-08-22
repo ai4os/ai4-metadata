@@ -23,7 +23,7 @@ def extract_version() -> str:
     return importlib.metadata.version(__package__ or __name__.split(".", maxsplit=1)[0])
 
 
-class MetadataVersions(enum.Enum):
+class MetadataVersions(str, enum.Enum):
     """Available versions of the AI4 metadata schema."""
 
     V1 = "1.0.0"
