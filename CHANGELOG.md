@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.1.0](https://github.com/ai4os/ai4-metadata/compare/v2.0.2...v2.1.0) (2024-08-22)
+
+
+### Features
+
+* add examples in V2 schemata ([5e37644](https://github.com/ai4os/ai4-metadata/commit/5e376448298f8369227a7e1ecfa7e4b8cad96499))
+* allow loading YAML files ([03bc86f](https://github.com/ai4os/ai4-metadata/commit/03bc86f52b80d2862f9604688d51cf3f0b609dce)), closes [#12](https://github.com/ai4os/ai4-metadata/issues/12)
+* generate empty metadata files ([f56c519](https://github.com/ai4os/ai4-metadata/commit/f56c5190dc34b2fa3f0180c2ad7d934e485dd907)), closes [#14](https://github.com/ai4os/ai4-metadata/issues/14)
+* improve message formatting, using rich ([a0ce5c7](https://github.com/ai4os/ai4-metadata/commit/a0ce5c74105bcac8c867cce88652c1ab190464e1)), closes [#13](https://github.com/ai4os/ai4-metadata/issues/13)
+* move to Typer for CLI implementation ([9a05025](https://github.com/ai4os/ai4-metadata/commit/9a05025b512322f4236aea708c73d176377a8de5)), closes [#15](https://github.com/ai4os/ai4-metadata/issues/15)
+
+
+### Bug Fixes
+
+* always put metadata version when generating ([36a3adc](https://github.com/ai4os/ai4-metadata/commit/36a3adcee76dd047b81fa1252a9bfe6059ed6480))
+* invalid default for enum ([f8b703e](https://github.com/ai4os/ai4-metadata/commit/f8b703ecf7ef816e1b46a0c65264c480c0553ba2))
+* refactor generator ([4c80fdb](https://github.com/ai4os/ai4-metadata/commit/4c80fdb52e7bcf0ed1193c83eab8b757cf639915))
+* remove commented code ([3c65bb6](https://github.com/ai4os/ai4-metadata/commit/3c65bb693e78957270384b8ec6c18bf91f1c8376))
+
+
+### Documentation
+
+* add Zenodo link ([daa08ac](https://github.com/ai4os/ai4-metadata/commit/daa08ace7468463b849d413416978d33978c1241))
+* improve README ([f60b910](https://github.com/ai4os/ai4-metadata/commit/f60b910942937f446357d78959d46e70e7fc4829))
+* include EU notice ([77b0c4c](https://github.com/ai4os/ai4-metadata/commit/77b0c4cf9e950ee26e1fb1b410a31e58c20c2c31))
+
 ## [2.0.2](https://github.com/ai4os/ai4-metadata/compare/v2.0.1...v2.0.2) (2024-08-19)
 
 
