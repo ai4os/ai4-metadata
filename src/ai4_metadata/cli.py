@@ -8,6 +8,7 @@ import warnings
 import typer
 
 import ai4_metadata
+from ai4_metadata import generate
 from ai4_metadata import exceptions
 from ai4_metadata import migrate
 from ai4_metadata import utils
@@ -110,10 +111,32 @@ def _generate(
         ai4_metadata.MetadataVersions,
         typer.Option(help="AI4 application metadata version."),
     ] = ai4_metadata.get_latest_version().value,
+    sample_values: Annotated[
+        bool, typer.Option("--sample-values", help="Generate sample values.")
+    ] = False,
+    required: Annotated[
+        bool, typer.Option("--required-only", help="Include only required fields.")
+    ] = False,
+    output: Annotated[
+        Optional[pathlib.Path],
+        typer.Option("--output", "-o", help="Output file for generated metadata."),
+    ] = None,
 ):
     """Generate an AI4 metadata schema."""
     schema = ai4_metadata.get_schema(metadata_version)
-    utils.format_rich_ok(f"Loaded schema for version {metadata_version.value} from '{schema}'")
+
+    try:
+        generated_json = generate.generate(schema, sample_values, required)
+    except exceptions.InvalidSchemaError as e:
+        utils.format_rich_error(e)
+        raise typer.Exit(1)
+
+    utils.dump_json(generated_json, output)
+
+    if output:
+        utils.format_rich_ok(
+            f"Sample file stored in '{output}' for version {metadata_version.value}"
+        )
 
 
 def version_callback(value: bool):
