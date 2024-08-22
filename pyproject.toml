@@ -9,8 +9,8 @@ homepage = "https://github.com/ai4os/ai4-metadata"
 repository = "https://github.com/ai4os/ai4-metadata"
 
 authors = [
-    "Pablo Orviz <orviz@ifca.unican.es>",
     "Álvaro López García <aloga@ifca.unican.es>",
+    "Pablo Orviz <orviz@ifca.unican.es>",
 ]
 
 classifiers = [
