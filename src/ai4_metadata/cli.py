@@ -27,7 +27,6 @@ def _migrate(
     ] = None,
 ):
     """Migrate an AI4 metadata file from V1 to the latest V2 version."""
-    # v1_metadata = utils.load_json(instance)
     v1_schema = ai4_metadata.get_schema(ai4_metadata.MetadataVersions.V1)
     validate.validate(v1_metadata, v1_schema)
 
