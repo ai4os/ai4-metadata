@@ -47,6 +47,16 @@ class InvalidYAMLError(InvalidFileError):
     message = "Error loading YAML file '{f}': {e}"
 
 
+class InvalidSchemaError(BaseExceptionError):
+    """Exception raised when a schema is invalid."""
+
+    message = "Schema file '{schema_file}' is invalid: {error}"
+
+    def __init__(self, schema_file: typing.Union[str, pathlib.Path], error: str):
+        """Initialize the exception."""
+        super().__init__(self.message.format(schema_file=schema_file, error=error))
+
+
 class SchemaValidationError(BaseExceptionError):
     """Exception raised when a schema is invalid."""
 
