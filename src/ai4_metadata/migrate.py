@@ -15,7 +15,7 @@ def migrate(instance_file: pathlib.Path) -> collections.OrderedDict:
 
     v2: collections.OrderedDict[str, typing.Any] = collections.OrderedDict()
 
-    v2["metadata_version"] = ai4_metadata.get_latest_version()
+    v2["metadata_version"] = ai4_metadata.get_latest_version().value
     v2["title"] = v1_metadata.get("title")
     v2["summary"] = v1_metadata.get("summary")
     v2["description"] = " ".join(v1_metadata.get("description", []))

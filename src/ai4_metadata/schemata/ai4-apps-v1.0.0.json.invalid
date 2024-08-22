@@ -1,0 +1,124 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "tosca": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "inputs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "rclone_conf",
+                            "rclone_url",
+                            "rclone_vendor",
+                            "rclone_user",
+                            "rclone_pass"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "title",
+                "url",
+                "inputs"
+            ]
+        }
+    },
+    "type": "object",
+    "properties": {
+        "title": {
+            "description": "Name of the Data Science application",
+            "type": "string"
+        },
+        "summary": {
+            "description": "Short text describing the value of the Data Science application",
+            "type": "string"
+        },
+        "description": {
+            "description": "Elaborated description of the Data Science application",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "date_creation": {
+            "description": "Data Science application creation date",
+            "type": "string",
+            "format": "date"
+        },
+        "keywords": {
+            "description": "Topic/s to best describe the Data Science application",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "type": "string"
+            }
+        },
+        "license": {
+            "description": "License adopted by the Data Science application",
+            "type": "string"
+        },
+        "cite_url": {
+            "description": "URL pointing to the relevant citation",
+            "type": "string",
+            "format": "uri"
+        },
+        "dataset_url": {
+            "description": "URL pointing to the relevant dataset",
+            "type": "string",
+            "format": "uri"
+        },
+        "sources": {
+            "title": "sources",
+            "type": "fobject",
+            "properties": {
+                "dockerfile_repo": {
+                    "description": "DEEP-OC repository URL",
+                    "type": "string",
+                    "format": "uri"
+                },
+                "docker_registry_repo": {
+                    "description": "Docker registry repository (relative) URL",
+                    "type": "string",
+                    "format": "uri-reference"
+                },
+                "code": {
+                    "description": "Data Science application source code repository URL",
+                    "type": "string",
+                    "format": "uri"
+                },
+                "pre_trained_weights": {
+                    "description": "URL of file containing weights from training",
+                    "type": "string",
+                    "format": "uri"
+                }
+            },
+            "required": [
+                "dockerfile_repo",
+                "docker_registry_repo",
+                "code"
+            ]
+        },
+        "tosca": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/tosca" }
+        }
+    },
+    "required": [
+        "title",
+        "summary",
+        "description",
+        "date_creation",
+        "keywords",
+        "license",
+        "sources"
+    ]
+}
