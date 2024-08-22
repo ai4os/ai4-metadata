@@ -29,6 +29,9 @@ def generate(
 
     generated_json: collections.OrderedDict[str, typing.Any] = collections.OrderedDict()
 
+    version = properties.pop("metadata_version").get("example")
+    generated_json["metadata_version"] = version
+
     # NOTE(aloga): this works for the current schema, but we need to handle this
     # recursively in order to make it work for nested objects
     for key, value in properties.items():
