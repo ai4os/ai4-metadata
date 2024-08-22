@@ -1,5 +1,10 @@
 # AI4 Metadata utilities
 
+[![GitHub license](https://img.shields.io/github/license/ai4os/ai4-metadata.svg)](https://github.com/ai4os/ai4-metadata/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/ai4os/ai4-metadata.svg)](https://github.com/ai4os/ai4-metadata/releases)
+[![PyPI](https://img.shields.io/pypi/v/ai4-metadata.svg)](https://pypi.python.org/pypi/ai4-metadata)
+[![Python versions](https://img.shields.io/pypi/pyversions/ai4-metadata.svg)](https://pypi.python.org/pypi/ai4-metadata)
+
 [![DOI](https://zenodo.org/badge/721337407.svg)](https://zenodo.org/doi/10.5281/zenodo.13343453)
 
 Metadata utilities for the AI4OS hub data science applications.
