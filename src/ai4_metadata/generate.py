@@ -32,33 +32,32 @@ def generate(
     version = properties.pop("metadata_version").get("example")
     generated_json["metadata_version"] = version
 
-    # NOTE(aloga): this works for the current schema, but we need to handle this
-    # recursively in order to make it work for nested objects
     for key, value in properties.items():
-        # If type is object, we need to go deeper
-        if value.get("type") == "object":
-            required_sub = value.get("required", [])
-            if required_only:
-                value["properties"] = {
-                    k: v
-                    for k, v in value.get("properties").items()
-                    if k in required_sub
-                }
-            generated_json[key] = collections.OrderedDict()
-            for sub_key, sub_value in value.get("properties").items():
-                if sample_values:
-                    generated_json[key][sub_key] = sub_value.get("example", "")
-                else:
-                    generated_json[key][sub_key] = ""
-        elif value.get("type") == "array":
-            if sample_values:
-                generated_json[key] = value.get("example", [])
-            else:
-                generated_json[key] = []
-        else:
-            if sample_values:
-                generated_json[key] = value.get("example", "")
-            else:
-                generated_json[key] = ""
+        generated_json[key] = _get_field_value(value, sample_values)
 
     return generated_json
+
+
+def _get_field_value(value: dict, sample_values: bool = False) -> typing.Any:
+    """Get the value of a field."""
+    if value.get("type") == "object":
+        required = value.get("required", [])
+
+        properties = value.get("properties", {})
+        if required:
+            properties = {k: v for k, v in properties.items() if k in required}
+
+        aux = collections.OrderedDict()
+        for key, sub_value in properties.items():
+            aux[key] = _get_field_value(sub_value, sample_values)
+        return aux
+    elif value.get("type") == "array":
+        if sample_values:
+            return value.get("example", [])
+        else:
+            return []
+    else:
+        if sample_values:
+            return value.get("example", "")
+        else:
+            return ""
