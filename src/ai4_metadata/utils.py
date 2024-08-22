@@ -9,18 +9,33 @@ import rich
 import rich.console
 import rich.highlighter
 import rich.panel
+import yaml
 
 from ai4_metadata import exceptions
 
 
 def load_json(path: typing.Union[str, pathlib.Path]) -> typing.Dict:
     """Load a JSON from the file f."""
-    file = open(path, "r")
     try:
+        file = open(path, "r")
         data = file.read()
         return json.loads(data)
+    except FileNotFoundError:
+        raise exceptions.FileNotFoundError(path)
     except json.JSONDecodeError as e:
         raise exceptions.InvalidJSONError(path, e)
+
+
+def load_yaml(path: typing.Union[str, pathlib.Path]) -> typing.Dict:
+    """Load a YAML from the file f."""
+    try:
+        file = open(path, "r")
+        data = file.read()
+        return yaml.safe_load(data)
+    except FileNotFoundError:
+        raise exceptions.FileNotFoundError(path)
+    except yaml.YAMLError as e:
+        raise exceptions.InvalidYAMLError(path, e)
 
 
 def dump_json(data: typing.Dict, path: typing.Optional[pathlib.Path] = None) -> None:

@@ -12,10 +12,21 @@ class BaseExceptionError(Exception):
     message = "An error occurred."
 
 
-class InvalidJSONError(BaseExceptionError):
-    """Exception raised when a JSON file is invalid."""
+class FileNotFoundError(BaseExceptionError):
+    """Exception raised when a file is not found."""
 
-    message = "Error loading JSON file '{f}': {e}"
+    message = "File '{f}' not found."
+
+    def __init__(self, f: typing.Union[str, pathlib.Path]):
+        """Initialize the exception."""
+        self.f = f
+        super().__init__(self.message.format(f=f))
+
+
+class InvalidFileError(BaseExceptionError):
+    """Exception raised when a file is invalid."""
+
+    message = "Error loading file '{f}': {e}"
 
     def __init__(self, f: typing.Union[str, pathlib.Path], e: Exception):
         """Initialize the exception."""
@@ -24,16 +35,24 @@ class InvalidJSONError(BaseExceptionError):
         super().__init__(self.message.format(f=f, e=e))
 
 
+class InvalidJSONError(InvalidFileError):
+    """Exception raised when a JSON file is invalid."""
+
+    message = "Error loading JSON file '{f}': {e}"
+
+
+class InvalidYAMLError(InvalidFileError):
+    """Exception raised when a JSON/YAML file is invalid."""
+
+    message = "Error loading YAML file '{f}': {e}"
+
+
 class SchemaValidationError(BaseExceptionError):
     """Exception raised when a schema is invalid."""
 
     message = "Error validating schema '{schema_file}': {e}"
 
-    def __init__(
-        self,
-        schema_file: typing.Union[str, pathlib.Path],
-        e: Exception
-    ):
+    def __init__(self, schema_file: typing.Union[str, pathlib.Path], e: Exception):
         """Initialize the exception."""
         self.e = e
         super().__init__(self.message.format(schema_file=schema_file, e=e))
@@ -47,7 +66,7 @@ class MetadataValidationError(BaseExceptionError):
     def __init__(
         self,
         instance_file: typing.Union[str, pathlib.Path],
-        e: jsonschema.exceptions.ValidationError
+        e: jsonschema.exceptions.ValidationError,
     ):
         """Initialize the exception."""
         self.instance_file = instance_file

@@ -14,12 +14,19 @@ def validate(
 ) -> None:
     """Validate the schema."""
     if isinstance(instance, pathlib.Path):
-        instance_file = instance
-        instance = utils.load_json(instance_file)
+        instance_file: typing.Union[str, pathlib.Path] = instance
+        try:
+            instance = utils.load_json(instance_file)
+        except exceptions.InvalidJSONError:
+            instance = utils.load_yaml(instance_file)
+    else:
+        instance_file = "no-file"
 
     if isinstance(schema, pathlib.Path):
-        schema_file = schema
+        schema_file: typing.Union[str, pathlib.Path] = schema
         schema = utils.load_json(schema_file)
+    else:
+        schema_file = "no-file"
 
     try:
         validator = validators.validator_for(schema)
