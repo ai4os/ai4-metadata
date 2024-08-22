@@ -104,6 +104,18 @@ def _validate(
     raise typer.Exit(code=exit_code)
 
 
+@app.command(name="generate")
+def _generate(
+    metadata_version: Annotated[
+        ai4_metadata.MetadataVersions,
+        typer.Option(help="AI4 application metadata version."),
+    ] = ai4_metadata.get_latest_version().value,
+):
+    """Generate an AI4 metadata schema."""
+    schema = ai4_metadata.get_schema(metadata_version)
+    utils.format_rich_ok(f"Loaded schema for version {metadata_version.value} from '{schema}'")
+
+
 def version_callback(value: bool):
     """Return the version for the --version option."""
     if value:
