@@ -133,6 +133,8 @@ def _generate(
 
     utils.dump_json(generated_json, output)
 
+    validate.validate(generated_json, schema)
+
     if output:
         utils.format_rich_ok(
             f"Sample file stored in '{output}' for version {metadata_version.value}"
