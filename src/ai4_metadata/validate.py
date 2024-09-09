@@ -13,7 +13,7 @@ import ai4_metadata
 from ai4_metadata import exceptions
 from ai4_metadata import utils
 
-app = typer.Typer()
+app = typer.Typer(help="Validate an AI4 metadata file (YAML, JSON) against the schema.")
 
 
 def validate(
