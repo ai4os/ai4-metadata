@@ -3,17 +3,24 @@
 import collections
 import datetime
 import pathlib
-import typing
+from typing_extensions import Annotated
+from typing import Any, Optional
+import warnings
+
+import typer
 
 import ai4_metadata
+from ai4_metadata import validate
 from ai4_metadata import utils
+
+app = typer.Typer()
 
 
 def migrate(instance_file: pathlib.Path) -> collections.OrderedDict:
     """Try to migrate metadata from V1 to latest V2."""
     v1_metadata = utils.load_json(instance_file)
 
-    v2: collections.OrderedDict[str, typing.Any] = collections.OrderedDict()
+    v2: collections.OrderedDict[str, Any] = collections.OrderedDict()
 
     v2["metadata_version"] = ai4_metadata.get_latest_version().value
     v2["title"] = v1_metadata.get("title")
@@ -69,3 +76,48 @@ def migrate(instance_file: pathlib.Path) -> collections.OrderedDict:
         v2["categories"].append("AI4 pre trained")
 
     return v2
+
+
+@app.command(name="migrate")
+def main(
+    v1_metadata: Annotated[
+        pathlib.Path, typer.Argument(help="AI4 application metadata file to migrate.")
+    ],
+    output: Annotated[
+        Optional[pathlib.Path],
+        typer.Option("--output", "-o", help="Output file for migrated metadata."),
+    ] = None,
+):
+    """Migrate an AI4 metadata file from V1 to the latest V2 version."""
+    v1_schema = ai4_metadata.get_schema(ai4_metadata.MetadataVersions.V1)
+    validate.validate(v1_metadata, v1_schema)
+
+    # Migrate metadata
+    v2_metadata = migrate(v1_metadata)
+    v2_version = ai4_metadata.get_latest_version()
+    v2_schema = ai4_metadata.get_schema(v2_version)
+    validate.validate(v2_metadata, v2_schema)
+
+    # Write out the migrated metadata
+    utils.dump_json(v2_metadata, output)
+    if output:
+        utils.format_rich_ok(
+            f"V1 metadata '{v1_metadata}' migrated to version {v2_version} and "
+            f"stored in '{output}'",
+        )
+
+
+def migrate_main():
+    """Run the migration command as an independent script."""
+    # NOTE(aloga): This is a workaround to be able to provide the command as a separate
+    # script, in order to be compatible with previous versions of the package. However,
+    # this will be not be supported in the next major version of the package, therfore
+    # we mark it as deprecated and raise a warining
+    msg = (
+        "The 'ai4-metadata-migrate' command is deprecated and will be removed "
+        "in the next major version of the package, please use 'ai4-metadata migrate' "
+        "instead."
+    )
+    warnings.warn(msg, DeprecationWarning, stacklevel=2)
+    utils.format_rich_warning(DeprecationWarning(msg))
+    typer.run(main)

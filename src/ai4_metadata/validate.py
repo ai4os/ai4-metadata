@@ -3,18 +3,25 @@
 import pathlib
 from jsonschema import validators
 import jsonschema.exceptions
-import typing
+from typing_extensions import Annotated
+from typing import List, Optional, Union
+import warnings
 
+import typer
+
+import ai4_metadata
 from ai4_metadata import exceptions
 from ai4_metadata import utils
 
+app = typer.Typer()
+
 
 def validate(
-    instance: typing.Union[dict, pathlib.Path], schema: typing.Union[dict, pathlib.Path]
+    instance: Union[dict, pathlib.Path], schema: Union[dict, pathlib.Path]
 ) -> None:
     """Validate the schema."""
     if isinstance(instance, pathlib.Path):
-        instance_file: typing.Union[str, pathlib.Path] = instance
+        instance_file: Union[str, pathlib.Path] = instance
         try:
             instance = utils.load_json(instance_file)
         except exceptions.InvalidJSONError:
@@ -23,7 +30,7 @@ def validate(
         instance_file = "no-file"
 
     if isinstance(schema, pathlib.Path):
-        schema_file: typing.Union[str, pathlib.Path] = schema
+        schema_file: Union[str, pathlib.Path] = schema
         schema = utils.load_json(schema_file)
     else:
         schema_file = "no-file"
@@ -38,3 +45,78 @@ def validate(
         validators.validate(instance, schema)
     except jsonschema.exceptions.ValidationError as e:
         raise exceptions.MetadataValidationError(instance_file, e)
+
+
+@app.command(name="validate")
+def main(
+    instances: Annotated[
+        List[pathlib.Path],
+        typer.Argument(
+            help="AI4 application metadata file to validate. The file can "
+            "be repeated to validate multiple files. Supported formats are "
+            "JSON and YAML."
+        ),
+    ],
+    schema: Annotated[
+        Optional[pathlib.Path],
+        typer.Option(help="AI4 application metadata schema file to use."),
+    ] = None,
+    metadata_version: Annotated[
+        ai4_metadata.MetadataVersions,
+        typer.Option(help="AI4 application metadata version."),
+    ] = ai4_metadata.get_latest_version(),
+    quiet: Annotated[
+        bool, typer.Option("--quiet", "-q", help="Suppress output for valid instances.")
+    ] = False,
+):
+    """Validate an AI4 metadata file against the AI4 metadata schema.
+
+    This command receives an AI4 metadata file and validates it against a
+    given version of the metadata schema. By default it will check against the latest
+    metadata version.
+
+    If the metadata is not valid it will exit with .
+
+    If you provide the --shema option, it will override the --metadata-version option.
+    """
+    schema_file = schema or ai4_metadata.get_schema(metadata_version)
+
+    exit_code = 0
+    for instance_file in instances:
+        try:
+            validate(instance_file, schema_file)
+        except exceptions.FileNotFoundError as e:
+            utils.format_rich_error(e)
+            typer.Exit(2)
+        except exceptions.InvalidFileError as e:
+            utils.format_rich_error(e)
+            typer.Exit(2)
+        except exceptions.SchemaValidationError as e:
+            utils.format_rich_error(e)
+            typer.Exit(3)
+        except exceptions.MetadataValidationError as e:
+            utils.format_rich_error(e)
+            exit_code = 1
+        else:
+            if not quiet:
+                utils.format_rich_ok(
+                    f"'{instance_file}' is valid for version {metadata_version.value}"
+                )
+
+    raise typer.Exit(code=exit_code)
+
+
+def validate_main():
+    """Run the validation command as an independent script."""
+    # NOTE(aloga): This is a workaround to be able to provide the command as a separate
+    # script, in order to be compatible with previous versions of the package. However,
+    # this will be not be supported in the next major version of the package, therfore
+    # we mark it as deprecated and raise a warining
+    msg = (
+        "The 'ai4-metadata-validator' command is deprecated and will be removed "
+        "in the next major version of the package, please use 'ai4-metadata validate' "
+        "instead."
+    )
+    warnings.warn(msg, DeprecationWarning, stacklevel=2)
+    utils.format_rich_warning(DeprecationWarning(msg))
+    typer.run(main)
