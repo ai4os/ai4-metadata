@@ -13,7 +13,7 @@ from ai4_metadata import exceptions
 from ai4_metadata import utils
 from ai4_metadata import validate
 
-app = typer.Typer()
+app = typer.Typer(help="Generate an AI4 metadata file (empty or with sample values).")
 
 
 def generate(

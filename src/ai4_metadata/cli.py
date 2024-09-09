@@ -7,7 +7,7 @@ from ai4_metadata import generate
 from ai4_metadata import migrate
 from ai4_metadata import validate
 
-app = typer.Typer()
+app = typer.Typer(help="AI4 Metadata tools and utils.")
 app.add_typer(generate.app, name="generate")
 app.add_typer(migrate.app, name="migrate")
 app.add_typer(validate.app, name="validate")

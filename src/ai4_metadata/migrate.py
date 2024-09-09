@@ -13,7 +13,7 @@ import ai4_metadata
 from ai4_metadata import validate
 from ai4_metadata import utils
 
-app = typer.Typer()
+app = typer.Typer(help="Migrate an AI4 metadata file from V1 to V2.")
 
 
 def migrate(instance_file: pathlib.Path) -> collections.OrderedDict:
