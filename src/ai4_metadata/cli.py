@@ -8,9 +8,12 @@ from ai4_metadata import migrate
 from ai4_metadata import validate
 
 app = typer.Typer(help="AI4 Metadata tools and utils.")
-app.add_typer(generate.app, name="generate")
-app.add_typer(migrate.app, name="migrate")
-app.add_typer(validate.app, name="validate")
+# NOTE(aloga): do not use app.add_typer(<module>.app) as it will create a command group
+# and add all commands as subcommands of that group.
+# Check https://github.com/fastapi/typer/issues/187 for more details
+app.registered_commands += generate.app.registered_commands
+app.registered_commands += migrate.app.registered_commands
+app.registered_commands += validate.app.registered_commands
 
 
 def version_callback(value: bool):
