@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.2.0](https://github.com/ai4os/ai4-metadata/compare/v2.1.0...v2.2.0) (2024-08-22)
+
+
+### Features
+
+* validate also generated metadata ([a6559eb](https://github.com/ai4os/ai4-metadata/commit/a6559eb662c52a4e9597421367ce3d37a70bd033))
+
+
+### Bug Fixes
+
+* Enum should inherit also from str ([c2ac3d9](https://github.com/ai4os/ai4-metadata/commit/c2ac3d9641a781400aed1edcb6e43b269b90c802))
+
+
+### Documentation
+
+* update README with shields ([b79c567](https://github.com/ai4os/ai4-metadata/commit/b79c567bcabdcc0e7280e08d3b931a2cea47ac66))
+
 ## [2.1.0](https://github.com/ai4os/ai4-metadata/compare/v2.0.2...v2.1.0) (2024-08-22)
 
 
