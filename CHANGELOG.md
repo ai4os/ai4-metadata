@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.1](https://github.com/ai4os/ai4-metadata/compare/v2.2.0...v2.2.1) (2024-10-10)
+
+
+### Bug Fixes
+
+* include help stings for each command ([6f70136](https://github.com/ai4os/ai4-metadata/commit/6f7013620bbfb2f9dc01fe40de30392db9b3f962))
+* using add_typer creates a subcommand group ([555f1e2](https://github.com/ai4os/ai4-metadata/commit/555f1e2295740103fa3885bd8b76dfc20fa8aeb2))
+
 ## [2.2.0](https://github.com/ai4os/ai4-metadata/compare/v2.1.0...v2.2.0) (2024-08-22)
 
 
