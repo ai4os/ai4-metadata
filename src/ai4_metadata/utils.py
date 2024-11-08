@@ -64,7 +64,9 @@ def _get_rich_console(stderr: bool = False) -> rich.console.Console:
     )
 
 
-def format_rich_error(error: exceptions.BaseExceptionError) -> None:
+def format_rich_error(
+    error: typing.Union[Exception, exceptions.BaseExceptionError]
+) -> None:
     """Format an error using rich."""
     console = _get_rich_console(stderr=True)
     console.print(
