@@ -85,18 +85,25 @@ def main(
     for instance_file in instances:
         try:
             validate(instance_file, schema_file)
-        except exceptions.FileNotFoundError as e:
+        # NOTE(aloga): we catch the exceptions that are fatal (i.e. files not found,
+        # invalid files, etc) and exit right away. For the rest of the exceptions we
+        # just print the error and continue with the next file
+        except (exceptions.FileNotFoundError, exceptions.InvalidFileError) as e:
             utils.format_rich_error(e)
-            typer.Exit(2)
-        except exceptions.InvalidFileError as e:
-            utils.format_rich_error(e)
-            typer.Exit(2)
+            raise typer.Exit(2)
         except exceptions.SchemaValidationError as e:
             utils.format_rich_error(e)
-            typer.Exit(3)
+            raise typer.Exit(3)
         except exceptions.MetadataValidationError as e:
+            # This case does not need to exit, but to continue with the next file
+            # and set the exit code to 1, so that at the end we exit with an error
             utils.format_rich_error(e)
             exit_code = 1
+        except Exception as e:
+            # If we arrive here is because we have an unexpected error, we print the
+            # error and exit with an error code
+            utils.format_rich_error(e)
+            raise typer.Exit(4)
         else:
             if not quiet:
                 utils.format_rich_ok(
