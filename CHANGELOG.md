@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.2.1](https://github.com/ai4os/ai4-metadata/compare/v2.2.0...v2.2.1) (2024-11-11)
+
+
+### Bug Fixes
+
+* include help stings for each command ([6f70136](https://github.com/ai4os/ai4-metadata/commit/6f7013620bbfb2f9dc01fe40de30392db9b3f962))
+* typer.Exit must be raised to abort the program ([c0f78e3](https://github.com/ai4os/ai4-metadata/commit/c0f78e3a777ebe10a348e135b2a0e7140b612113)), closes [#27](https://github.com/ai4os/ai4-metadata/issues/27)
+* using add_typer creates a subcommand group ([555f1e2](https://github.com/ai4os/ai4-metadata/commit/555f1e2295740103fa3885bd8b76dfc20fa8aeb2))
+
 ## [2.2.0](https://github.com/ai4os/ai4-metadata/compare/v2.1.0...v2.2.0) (2024-08-22)
 
 
