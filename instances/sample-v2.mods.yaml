@@ -15,6 +15,13 @@
     "links": {
         "source_code": "https://github.com/deephdc/DEEP-OC-mods",
         "docker_image": "https://hub.docker.com/r/deephdc/deep-oc-mods"
+    },
+    "resources": {
+      "inference": {
+        "gpu": 1,
+        "memory": "16GB",
+        "cpu": 4
+      }
     }
 }
 

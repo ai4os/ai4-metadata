@@ -6,7 +6,7 @@
         "metadata_version": {
             "description": "Version of the metadata schema.",
             "pattern": "^[0-9]{1,}.[0-9]{1,}.[0-9]{1,}$",
-            "example": "2.0.0",
+            "example": "2.1.0",
             "type": "string"
         },
         "title": {
@@ -216,6 +216,55 @@
             },
             "user_friendly": "Data Type",
             "example": ["Text"]
+        },
+        "resources": {
+            "description": "Resources (CPU, GPU, storage) needed for the application.",
+            "type": "object",
+            "properties": {
+                "inference": {
+                    "description": "Minimum / reccomended resources needed for inference.",
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "description": "Number of CPUs needed for inference.",
+                            "type": "number",
+                            "user_friendly": "Number of CPUs",
+                            "example": 1
+                        },
+                        "gpu": {
+                            "description": "Number of GPUs needed for inference.",
+                            "type": "number",
+                            "user_friendly": "Number of GPUs",
+                            "example": 1
+                        },
+                        "memory": {
+                            "description": "Memory needed for inference.",
+                            "type": "string",
+                            "user_friendly": "Memory",
+                            "example": "8GB"
+                        },
+                        "gpu_memory": {
+                            "description": "GPU memory needed for inference.",
+                            "type": "string",
+                            "user_friendly": "GPU Memory",
+                            "example": "8GB"
+                        },
+                        "gpu_compute_capability": {
+                            "description": "GPU compute capability needed for inference. Check https://developer.nvidia.com/cuda-gpus",
+                            "pattern": "^[0-9]{1,}.[0-9]{1,}$",
+                            "type": "string",
+                            "user_friendly": "GPU Compute Capability",
+                            "example": "7.0"
+                        },
+                        "storage": {
+                            "description": "Storage needed for inference.",
+                            "type": "string",
+                            "user_friendly": "Storage",
+                            "example": "10GB"
+                        }
+                    }
+                }
+            }
         }
     },
     "required": [
