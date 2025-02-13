@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.0](https://github.com/ai4os/ai4-metadata/compare/v2.2.1...v2.3.0) (2025-02-13)
+
+
+### Features
+
+* Include inference resources in metadata ([88c5be3](https://github.com/ai4os/ai4-metadata/commit/88c5be3a8981e5c21422a5430b64a3c80cd1d588))
+
+
+### Bug Fixes
+
+* change YAML example to be actually YAML ([3777b6e](https://github.com/ai4os/ai4-metadata/commit/3777b6e7986e01c16a9abceb929dd5b65f069b8b))
+* set correct file permissions ([199bc90](https://github.com/ai4os/ai4-metadata/commit/199bc90650df964216ec8ad08e7e8f52aa6527ac))
+
 ## [2.2.1](https://github.com/ai4os/ai4-metadata/compare/v2.2.0...v2.2.1) (2024-11-11)
 
 
