@@ -35,10 +35,10 @@ class MetadataVersions(str, enum.Enum):
 
 _metadata_version_files = {
     MetadataVersions.V1: pathlib.Path(
-        pathlib.Path(__file__).parent / "schemata/ai4-apps-v1.0.0.json"
+        pathlib.Path(__file__).parent / f"schemata/ai4-apps-v{MetadataVersions.V1}.json"
     ),
     MetadataVersions.V2: pathlib.Path(
-        pathlib.Path(__file__).parent / "schemata/ai4-apps-v2.0.0.json"
+        pathlib.Path(__file__).parent / f"schemata/ai4-apps-v{MetadataVersions.V2}.json"
     ),
 }
 
