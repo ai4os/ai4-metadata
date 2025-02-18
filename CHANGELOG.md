@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/ai4os/ai4-metadata/compare/v2.3.0...v2.3.1) (2025-02-18)
+
+
+### Bug Fixes
+
+* error when mapping schemas ([bcefd60](https://github.com/ai4os/ai4-metadata/commit/bcefd601867bcf41f261b1ae0e246a06a283ebed))
+
 ## [2.3.0](https://github.com/ai4os/ai4-metadata/compare/v2.2.1...v2.3.0) (2025-02-13)
 
 
