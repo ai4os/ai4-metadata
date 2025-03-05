@@ -1,5 +1,6 @@
 """Custom exceptions for the metadata schema validation tool."""
 
+import os
 import pathlib
 import typing
 
@@ -71,7 +72,10 @@ class SchemaValidationError(BaseExceptionError):
 class MetadataValidationError(BaseExceptionError):
     """Exception raised when a metadata file is invalid."""
 
-    message = "Error validating instance '{instance_file}': {e}"
+    message = (
+        "Error validating instance '{instance_file}': {e} \n"
+        "Parameter: [bold yellow]{path}[/bold yellow]"
+    )
 
     def __init__(
         self,
@@ -81,4 +85,10 @@ class MetadataValidationError(BaseExceptionError):
         """Initialize the exception."""
         self.instance_file = instance_file
         self.e = e
-        super().__init__(self.message.format(instance_file=instance_file, e=e.message))
+        super().__init__(
+            self.message.format(
+                instance_file=instance_file,
+                e=e.message,
+                path=os.path.join(*list(e.absolute_path)),
+            )
+        )
