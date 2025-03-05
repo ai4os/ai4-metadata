@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.3.1](https://github.com/ai4os/ai4-metadata/compare/v2.3.0...v2.3.1) (2025-03-05)
+
+
+### Bug Fixes
+
+* error when mapping schemas ([bcefd60](https://github.com/ai4os/ai4-metadata/commit/bcefd601867bcf41f261b1ae0e246a06a283ebed))
+* fix mypy error ([53cae21](https://github.com/ai4os/ai4-metadata/commit/53cae21c8059c74a83270b80d789e43ecaee113f))
+* handle errors with no path ([bf15bf6](https://github.com/ai4os/ai4-metadata/commit/bf15bf624cd52fb7c69a97c40c36dd239ecef17d))
+* move inference resources to numeric ([76173e9](https://github.com/ai4os/ai4-metadata/commit/76173e9dcde552f65e5532f496aab4e199fba5d8))
+* show faulty parameter in error message ([e33231e](https://github.com/ai4os/ai4-metadata/commit/e33231e4a49772f224e6c381d1fed9dfb99e26d0))
+
 ## [2.3.0](https://github.com/ai4os/ai4-metadata/compare/v2.2.1...v2.3.0) (2025-02-13)
 
 

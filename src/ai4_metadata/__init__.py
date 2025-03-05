@@ -6,7 +6,7 @@ import pathlib
 
 import enum
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 
 
 def extract_version() -> str:
