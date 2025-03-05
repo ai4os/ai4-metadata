@@ -97,7 +97,7 @@
             },
             "required": [
                 "source_code"
-            ]   
+            ]
         },
         "dates": {
             "title": "dates",
@@ -222,45 +222,50 @@
             "type": "object",
             "properties": {
                 "inference": {
-                    "description": "Minimum / reccomended resources needed for inference.",
+                    "description": "Minimum / recommended resources needed for inference.",
                     "type": "object",
                     "properties": {
                         "cpu": {
                             "description": "Number of CPUs needed for inference.",
-                            "type": "number",
                             "user_friendly": "Number of CPUs",
+                            "type": "integer",
+                            "minimum": 0,
                             "example": 1
                         },
                         "gpu": {
                             "description": "Number of GPUs needed for inference.",
-                            "type": "number",
                             "user_friendly": "Number of GPUs",
+                            "type": "integer",
+                            "minimum": 0,
                             "example": 1
                         },
-                        "memory": {
-                            "description": "Memory needed for inference.",
-                            "type": "string",
-                            "user_friendly": "Memory",
-                            "example": "8GB"
+                        "memory_MB": {
+                            "description": "Memory needed for inference (in MB).",
+                            "user_friendly": "Memory RAM",
+                            "type": "integer",
+                            "minimum": 0,
+                            "example": 8000
                         },
-                        "gpu_memory": {
-                            "description": "GPU memory needed for inference.",
-                            "type": "string",
+                        "gpu_memory_MB": {
+                            "description": "GPU memory needed for inference (in MB).",
                             "user_friendly": "GPU Memory",
-                            "example": "8GB"
+                            "type": "integer",
+                            "minimum": 0,
+                            "example": 8000
                         },
                         "gpu_compute_capability": {
                             "description": "GPU compute capability needed for inference. Check https://developer.nvidia.com/cuda-gpus",
-                            "pattern": "^[0-9]{1,}.[0-9]{1,}$",
-                            "type": "string",
                             "user_friendly": "GPU Compute Capability",
-                            "example": "7.0"
+                            "type": "number",
+                            "minimum": 0,
+                            "example": 6.1
                         },
-                        "storage": {
-                            "description": "Storage needed for inference.",
-                            "type": "string",
+                        "storage_MB": {
+                            "description": "Storage needed for inference (in MB).",
                             "user_friendly": "Storage",
-                            "example": "10GB"
+                            "type": "integer",
+                            "minimum": 0,
+                            "example": 10000
                         }
                     }
                 }
@@ -278,7 +283,7 @@
         "categories",
         "tags"
     ],
-    "not": { 
+    "not": {
         "anyOf": [
             { "required": ["tosca"] },
             { "required": ["sources"] },
@@ -286,7 +291,7 @@
             { "required": ["cite_url"] },
             { "required": ["date_creation"] },
             { "required": ["keywords"] },
-            { "required": ["license"] }   
+            { "required": ["license"] }
         ]
     }
 }
