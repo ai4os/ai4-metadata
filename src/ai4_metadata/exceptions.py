@@ -72,10 +72,7 @@ class SchemaValidationError(BaseExceptionError):
 class MetadataValidationError(BaseExceptionError):
     """Exception raised when a metadata file is invalid."""
 
-    message = (
-        "Error validating instance '{instance_file}': {e} \n"
-        "Parameter: [bold yellow]{path}[/bold yellow]"
-    )
+    message = "Error validating instance '{instance_file}': {e}"
 
     def __init__(
         self,
@@ -85,10 +82,8 @@ class MetadataValidationError(BaseExceptionError):
         """Initialize the exception."""
         self.instance_file = instance_file
         self.e = e
-        super().__init__(
-            self.message.format(
-                instance_file=instance_file,
-                e=e.message,
-                path=os.path.join(*list(e.absolute_path)),
-            )
-        )
+        message = e.message
+        if e.absolute_path:  # the error comes from a specific parameter
+            path = os.path.join(*list(e.absolute_path))
+            message += f"Parameter: [bold yellow]{path}[/bold yellow]"
+        super().__init__(self.message.format(instance_file=instance_file, e=message))
