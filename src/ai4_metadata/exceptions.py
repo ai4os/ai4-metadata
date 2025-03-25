@@ -87,3 +87,14 @@ class MetadataValidationError(BaseExceptionError):
             path = os.path.join(*[str(i) for i in e.absolute_path])
             message += f"\nParameter: [bold yellow]{path}[/bold yellow]"
         super().__init__(self.message.format(instance_file=instance_file, e=message))
+
+
+class InvalidMappingError(BaseExceptionError):
+    """Exception raised when a mapping is invalid."""
+
+    message = "Error generating mapping: {msg}"
+
+    def __init__(self, msg: str):
+        """Initialize the exception."""
+        self.msg = msg
+        super().__init__(self.message.format(msg=msg))

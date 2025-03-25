@@ -5,6 +5,7 @@ import typer
 import ai4_metadata
 from ai4_metadata import generate
 from ai4_metadata import migrate
+from ai4_metadata import mapping
 from ai4_metadata import validate
 
 app = typer.Typer(help="AI4 Metadata tools and utils.")
@@ -14,6 +15,7 @@ app = typer.Typer(help="AI4 Metadata tools and utils.")
 app.registered_commands += generate.app.registered_commands
 app.registered_commands += migrate.app.registered_commands
 app.registered_commands += validate.app.registered_commands
+app.registered_commands += mapping.app.registered_commands
 
 
 def version_callback(value: bool):
