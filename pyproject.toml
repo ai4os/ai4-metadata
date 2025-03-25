@@ -30,8 +30,8 @@ classifiers = [
 "Bug Tracker" = "https://github.com/ai4os/ai4-metadata/issues"
 
 [tool.poetry.scripts]
-ai4-metadata-validator = "ai4_metadata.cli:validate_main"
-ai4-metadata-migrate = "ai4_metadata.cli:migrate_main"
+ai4-metadata-validator = "ai4_metadata.validate:validate_main"
+ai4-metadata-migrate = "ai4_metadata.migrate:migrate_main"
 ai4-metadata = "ai4_metadata.cli:app"
 
 [tool.poetry.dependencies]
