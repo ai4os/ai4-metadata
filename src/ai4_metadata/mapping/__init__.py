@@ -71,6 +71,7 @@ def _map(
                 from_profile=from_profile,
                 from_metadata=metadata,
                 to_format=to_format,
+                metadata_version=metadata_version,
             )
         except exceptions.InvalidMappingError as e:
             utils.format_rich_error(e)

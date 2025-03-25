@@ -6,15 +6,24 @@ import json
 
 import rdflib
 
+import ai4_metadata
 from ai4_metadata import exceptions
 
 
 # FIXME(aloga): this is a placeholder for now, change to final value when we merge
 # the code in the main branch
-MLDCAT_JSON_LD_FILE = (
-    "https://semiceu.github.io/EOSC-MLDCAT-AP-Pilot/example/"
-    "eosc2.0.0-mldcat-ap-context.jsonld"
+_url_prefix = (
+    "https://github.com/ai4os/ai4-metadata/raw/refs/heads/mldcat-ap/src/"
+    "ai4_metadata/mapping/json-ld/"
 )
+MetadataVersions = ai4_metadata.MetadataVersions
+
+_JSON_LD_CONTEXT = {
+    MetadataVersions.V2: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
+    MetadataVersions.V2_2_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
+    MetadataVersions.V2_1_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
+    MetadataVersions.V2_0_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
+}
 
 
 class SupportedInputProfiles(str, enum.Enum):
@@ -40,6 +49,7 @@ def generate_mapping(
     from_profile: SupportedInputProfiles,
     from_metadata: dict,
     to_format: SupportedOutputFormats,
+    metadata_version: MetadataVersions = MetadataVersions.V2,
 ) -> str:
     """Generate a mapping file for a given input and output format."""
     if from_profile not in SupportedInputProfiles.__members__:
@@ -57,7 +67,7 @@ def generate_mapping(
         uri = from_metadata.get("links", {}).get("source_code", "")
 
     new_meta = copy.deepcopy(from_metadata)
-    new_meta["@context"] = MLDCAT_JSON_LD_FILE
+    new_meta["@context"] = _JSON_LD_CONTEXT[metadata_version]
     new_meta["uri"] = uri
     new_meta["type"] = "MachineLearningModel"
 
