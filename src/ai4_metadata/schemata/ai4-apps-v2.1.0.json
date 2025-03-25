@@ -290,8 +290,7 @@
             { "required": ["dataset_url"] },
             { "required": ["cite_url"] },
             { "required": ["date_creation"] },
-            { "required": ["keywords"] },
-            { "required": ["license"] }
+            { "required": ["keywords"] }
         ]
     }
 }
