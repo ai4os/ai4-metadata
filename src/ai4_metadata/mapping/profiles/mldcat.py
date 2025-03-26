@@ -71,6 +71,18 @@ def generate_mapping(
     new_meta["uri"] = uri
     new_meta["type"] = "MachineLearningModel"
 
+    # FIXME(aloga): we replace this here, manually, but ai4os metadata should be
+    # fixed to use the correct format, and not use strings but objects.
+    new_meta["categories"] = [
+        cat.replace(" ", "_") for cat in new_meta.get("categories", [])
+    ]
+    new_meta["tasks"] = [
+        task.replace(" ", "_") for task in new_meta.get("tasks", [])
+    ]
+    new_meta["libraries"] = [
+        lib.replace(" ", "_") for lib in new_meta.get("libraries", [])
+    ]
+
     if to_format == SupportedOutputFormats.ttl:
         graph = rdflib.Graph()
         graph.parse(data=json.dumps(new_meta), format="json-ld")
