@@ -28,9 +28,9 @@ provide commands to validate and migrate the metadata files.
 
 ### Metadata validation
 
-The metadata utilities provide a command-line interface (CLI) tool
-`ai4-metadata-validate` that can be used to validate the metadata files. The
-CLI tool accepts the metadata files as input parameters.
+The metadata utilities provide a subcommand `ai4-metadata validate` that can be
+used to validate the metadata files. The CLI tool accepts the metadata files as
+input parameters.
 
     $ ai4-metadata validate instances/sample-v2.mods.json
     ╭─ Success ──────────────────────────────────────────────────────────────────╮
@@ -67,11 +67,33 @@ utilities will automatically detect the format.
     │ 'instances/sample-v2.mods.json' is valid for version 2.0.0                 │
     ╰────────────────────────────────────────────────────────────────────────────╯
 
+### Metadata mapping between different profiles and formats
+
+The metadata utilities provide a subcommand `ai4-metadata map` that can be used
+to map the `ai4` metadata into different metadata profiles and different output
+serialization formats. The supported profiles and formats are detailed below.
+
+#### MLDCAT-AP profile
+
+We support the [MLDCAT-AP](https://semiceu.github.io/MLDCAT-AP/) profile
+developed by the [SEMIC](https://interoperable-europe.ec.europa.eu/collection/semic-support-centre)
+support centre. The MLDCAT-AP profile is a metadata profile aimed to extend the
+use of [DCAT Aplication Profile](https://interoperable-europe.ec.europa.eu/collection/semic-support-centre/solution/dcat-application-profile-data-portals-europe)
+for data portals in Europe.
+
+In order to map the `ai4` metadata into the MLDCAT-AP profile you can use the
+`ai4-metadata map mldcat` subcommand. The input metadata file must be in the
+`ai4` metadata format (YAML or JSON). You can specify what format the metadata
+should be rendered into, either JSON-LD (`jsonld`) or RD Turtle (`ttl`).
+
+    $ ai4-metadata map mldcat instances/sample-v2.mods.json --output-format jsonld --output sample-v2.mldcat.jsonld
+    $ ai4-metadata map mldcat instances/sample-v2.mods.json --output-format ttl --output sample-v2.mldcat.ttl
+
 ### Metadata migration
 
-The metadata utilities provide a command-line interface (CLI) tool
-`ai4-metadata-migrate` that can be used to migrate the metadata files from V1
-to latest V2. To save the output, use the `--output` option.
+The metadata utilities provide a subcommand `ai4-metadata migrate` that can be
+used to migrate the metadata files from V1 to latest V2. To save the output,
+use the `--output` option.
 
     $ ai4-metadata migrate --output sample-v2.mods.json instances/sample-v1.mods.json
     ╭─ Success ──────────────────────────────────────────────────────────────────╮
