@@ -9,7 +9,7 @@ import warnings
 
 import typer
 
-import ai4_metadata
+from ai4_metadata import metadata
 from ai4_metadata import validate
 from ai4_metadata import utils
 
@@ -22,7 +22,7 @@ def migrate(instance_file: pathlib.Path) -> collections.OrderedDict:
 
     v2: collections.OrderedDict[str, Any] = collections.OrderedDict()
 
-    v2["metadata_version"] = ai4_metadata.get_latest_version().value
+    v2["metadata_version"] = metadata.get_latest_version().value
     v2["title"] = v1_metadata.get("title")
     v2["summary"] = v1_metadata.get("summary")
     v2["description"] = " ".join(v1_metadata.get("description", []))
@@ -79,7 +79,7 @@ def migrate(instance_file: pathlib.Path) -> collections.OrderedDict:
 
 
 @app.command(name="migrate")
-def main(
+def _main(
     v1_metadata: Annotated[
         pathlib.Path, typer.Argument(help="AI4 application metadata file to migrate.")
     ],
@@ -89,13 +89,13 @@ def main(
     ] = None,
 ):
     """Migrate an AI4 metadata file from V1 to the latest V2 version."""
-    v1_schema = ai4_metadata.get_schema(ai4_metadata.MetadataVersions.V1)
+    v1_schema = metadata.get_schema(metadata.MetadataVersions.V1)
     validate.validate(v1_metadata, v1_schema)
 
     # Migrate metadata
     v2_metadata = migrate(v1_metadata)
-    v2_version = ai4_metadata.get_latest_version()
-    v2_schema = ai4_metadata.get_schema(v2_version)
+    v2_version = metadata.get_latest_version()
+    v2_schema = metadata.get_schema(v2_version)
     validate.validate(v2_metadata, v2_schema)
 
     # Write out the migrated metadata
@@ -107,7 +107,7 @@ def main(
         )
 
 
-def migrate_main():
+def _migrate_main():
     """Run the migration command as an independent script."""
     # NOTE(aloga): This is a workaround to be able to provide the command as a separate
     # script, in order to be compatible with previous versions of the package. However,
@@ -120,4 +120,4 @@ def migrate_main():
     )
     warnings.warn(msg, DeprecationWarning, stacklevel=2)
     utils.format_rich_warning(DeprecationWarning(msg))
-    typer.run(main)
+    typer.run(_main)
