@@ -64,6 +64,11 @@ def _get_field_value(value: dict, sample_values: bool = False) -> Any:
             return value.get("example", [])
         else:
             return []
+    elif value.get("type") in ["integer", "number"]:
+        if sample_values:
+            return value.get("example", 0)
+        else:
+            return 0
     else:
         if sample_values:
             return value.get("example", "")
