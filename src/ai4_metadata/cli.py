@@ -15,7 +15,12 @@ app = typer.Typer(help="AI4 Metadata tools and utils.")
 app.registered_commands += generate.app.registered_commands
 app.registered_commands += migrate.app.registered_commands
 app.registered_commands += validate.app.registered_commands
-app.registered_commands += mapping.app.registered_commands
+
+# NOTE(aloga): Instead, here we want to use add_typer to add the mapping commands as
+# subcommands of the main app. Then, inside the mapping module, we will use app =
+# typer.Typer() to create a new command group, and use registered_commands to add the
+# commands to the new group.
+app.add_typer(mapping.app, name="map")
 
 
 def version_callback(value: bool):
