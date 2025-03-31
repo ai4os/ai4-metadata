@@ -36,6 +36,18 @@ class InvalidFileError(BaseExceptionError):
         super().__init__(self.message.format(f=f, e=e))
 
 
+class InvalidMetadataError(BaseExceptionError):
+    """Exception raised when a metadata file is invalid."""
+
+    message = "Error loading metadata file '{f}': {e}"
+
+    def __init__(self, f: typing.Union[str, pathlib.Path], e: str):
+        """Initialize the exception."""
+        self.f = f
+        self.e = e
+        super().__init__(self.message.format(f=f, e=e))
+
+
 class InvalidJSONError(InvalidFileError):
     """Exception raised when a JSON file is invalid."""
 
@@ -53,9 +65,14 @@ class InvalidSchemaError(BaseExceptionError):
 
     message = "Schema file '{schema_file}' is invalid: {error}"
 
-    def __init__(self, schema_file: typing.Union[str, pathlib.Path], error: str):
+    def __init__(
+        self,
+        schema_file: typing.Union[str, pathlib.Path],
+        e: typing.Union[str, Exception],
+    ):
         """Initialize the exception."""
-        super().__init__(self.message.format(schema_file=schema_file, error=error))
+        self.e = e
+        super().__init__(self.message.format(schema_file=schema_file, e=e))
 
 
 class SchemaValidationError(BaseExceptionError):

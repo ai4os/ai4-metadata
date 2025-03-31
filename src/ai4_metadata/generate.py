@@ -1,10 +1,9 @@
 """Generate an AI4 metadata follwowing schema with empty of with samples."""
 
 import collections
-import json
 import pathlib
 from typing_extensions import Annotated, Optional
-from typing import Union, Any
+from typing import Any
 
 import typer
 
@@ -17,22 +16,20 @@ app = typer.Typer(help="Generate an AI4 metadata file (empty or with sample valu
 
 
 def generate(
-    schema: Union[pathlib.Path, str],
+    schema: dict,
     sample_values: bool = False,
     required_only: bool = False,
 ) -> collections.OrderedDict:
     """Generate an AI4 metadata schema empty of with samples."""
-    schema_json = json.load(open(schema, "r"))
-
-    properties = schema_json.get("properties")
-    required = schema_json.get("required", [])
+    properties = schema.get("properties", {})
+    required = schema.get("required", [])
 
     if required_only:
         properties = {k: v for k, v in properties.items() if k in required}
 
     if not properties:
         raise exceptions.InvalidSchemaError(
-            schema, "No definitions found in the schema."
+            "no-file", "No definitions found in the schema."
         )
 
     generated_json: collections.OrderedDict[str, Any] = collections.OrderedDict()
@@ -99,12 +96,18 @@ def _main(
     try:
         generated_json = generate(schema, sample_values, required)
     except exceptions.InvalidSchemaError as e:
+        schema_file = metadata.get_schema_file(metadata_version)
+        e = exceptions.InvalidSchemaError(schema_file, e.e)
         utils.format_rich_error(e)
         raise typer.Exit(1)
 
     utils.dump_json(generated_json, output)
 
-    validate.validate(generated_json, schema)
+    try:
+        validate.validate(generated_json, schema)
+    except exceptions.MetadataValidationError as e:
+        utils.format_rich_error(e)
+        raise typer.Exit(1)
 
     if output:
         utils.format_rich_ok(

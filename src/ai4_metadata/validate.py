@@ -1,7 +1,6 @@
 """Main module for AI4 metadata validator."""
 
 import pathlib
-from jsonschema import validators
 import jsonschema.exceptions
 from typing_extensions import Annotated
 from typing import List, Optional, Union
@@ -51,10 +50,7 @@ def validate_file(
     :raises SchemaValidationError: If the schema is invalid.
     :raises MetadataValidationError: If the metadata is invalid.
     """
-    try:
-        instance = utils.load_json(instance_file)
-    except exceptions.InvalidJSONError:
-        instance = utils.load_yaml(instance_file)
+    instance = utils.load_file(instance_file)
 
     try:
         validate_json(instance, schema)
@@ -70,20 +66,10 @@ def validate_json(instance: dict, schema: Union[dict, pathlib.Path]) -> None:
 
     :raises SchemaValidationError: If the schema is invalid.
     """
-    if isinstance(schema, pathlib.Path):
-        schema_file: Union[str, pathlib.Path] = schema
-        schema = utils.load_json(schema_file)
-    else:
-        schema_file = "no-file"
+    validator = metadata.get_validator_for_schema(schema)
 
     try:
-        validator = validators.validator_for(schema)
-        validator.check_schema(schema)
-    except jsonschema.exceptions.SchemaError as e:
-        raise exceptions.SchemaValidationError(schema_file, e)
-
-    try:
-        validators.validate(instance, schema)
+        validator.validate(instance)
     except jsonschema.exceptions.ValidationError as e:
         raise exceptions.MetadataValidationError("no-file", e)
 

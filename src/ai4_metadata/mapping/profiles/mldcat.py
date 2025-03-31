@@ -128,10 +128,7 @@ def _map(
         utils.format_rich_error(e)
         raise typer.Exit(4)
 
-    try:
-        from_metadata = utils.load_json(from_file)
-    except exceptions.InvalidJSONError:
-        from_metadata = utils.load_yaml(from_file)
+    from_metadata = utils.load_file(from_file)
 
     try:
         mapping = generate_mapping(
