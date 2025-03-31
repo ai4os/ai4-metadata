@@ -8,7 +8,7 @@ from typing import Union, Any
 
 import typer
 
-import ai4_metadata
+from ai4_metadata import metadata
 from ai4_metadata import exceptions
 from ai4_metadata import utils
 from ai4_metadata import validate
@@ -72,11 +72,11 @@ def _get_field_value(value: dict, sample_values: bool = False) -> Any:
 
 
 @app.command(name="generate")
-def main(
+def _main(
     metadata_version: Annotated[
-        ai4_metadata.MetadataVersions,
+        metadata.MetadataVersions,
         typer.Option(help="AI4 application metadata version."),
-    ] = ai4_metadata.get_latest_version(),
+    ] = metadata.get_latest_version(),
     sample_values: Annotated[
         bool, typer.Option("--sample-values", help="Generate sample values.")
     ] = False,
@@ -89,7 +89,7 @@ def main(
     ] = None,
 ):
     """Generate an AI4 metadata schema."""
-    schema = ai4_metadata.get_schema(metadata_version)
+    schema = metadata.get_schema(metadata_version)
 
     try:
         generated_json = generate(schema, sample_values, required)

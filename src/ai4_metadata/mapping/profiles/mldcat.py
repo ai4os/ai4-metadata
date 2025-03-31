@@ -6,7 +6,7 @@ import json
 
 import rdflib
 
-import ai4_metadata
+from ai4_metadata import metadata
 from ai4_metadata import exceptions
 
 
@@ -16,7 +16,7 @@ _url_prefix = (
     "https://github.com/ai4os/ai4-metadata/raw/refs/heads/mldcat-ap/src/"
     "ai4_metadata/mapping/json-ld/"
 )
-MetadataVersions = ai4_metadata.MetadataVersions
+MetadataVersions = metadata.MetadataVersions
 
 _JSON_LD_CONTEXT = {
     MetadataVersions.V2: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",

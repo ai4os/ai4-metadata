@@ -9,7 +9,7 @@ import warnings
 
 import typer
 
-import ai4_metadata
+from ai4_metadata import metadata
 from ai4_metadata import exceptions
 from ai4_metadata import utils
 
@@ -48,7 +48,7 @@ def validate(
 
 
 @app.command(name="validate")
-def main(
+def _main(
     instances: Annotated[
         List[pathlib.Path],
         typer.Argument(
@@ -62,9 +62,9 @@ def main(
         typer.Option(help="AI4 application metadata schema file to use."),
     ] = None,
     metadata_version: Annotated[
-        ai4_metadata.MetadataVersions,
+        metadata.MetadataVersions,
         typer.Option(help="AI4 application metadata version."),
-    ] = ai4_metadata.get_latest_version(),
+    ] = metadata.get_latest_version(),
     quiet: Annotated[
         bool, typer.Option("--quiet", "-q", help="Suppress output for valid instances.")
     ] = False,
@@ -79,7 +79,7 @@ def main(
 
     If you provide the --shema option, it will override the --metadata-version option.
     """
-    schema_file = schema or ai4_metadata.get_schema(metadata_version)
+    schema_file = schema or metadata.get_schema(metadata_version)
 
     exit_code = 0
     for instance_file in instances:
@@ -113,7 +113,7 @@ def main(
     raise typer.Exit(code=exit_code)
 
 
-def validate_main():
+def _validate_main():
     """Run the validation command as an independent script."""
     # NOTE(aloga): This is a workaround to be able to provide the command as a separate
     # script, in order to be compatible with previous versions of the package. However,
@@ -126,4 +126,4 @@ def validate_main():
     )
     warnings.warn(msg, DeprecationWarning, stacklevel=2)
     utils.format_rich_warning(DeprecationWarning(msg))
-    typer.run(main)
+    typer.run(_main)
