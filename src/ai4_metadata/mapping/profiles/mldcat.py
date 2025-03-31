@@ -3,11 +3,17 @@
 import copy
 import enum
 import json
+import pathlib
+from typing_extensions import Annotated
+from typing import Optional
 
+import typer
 import rdflib
 
 from ai4_metadata import metadata
 from ai4_metadata import exceptions
+from ai4_metadata import utils
+from ai4_metadata import validate
 
 
 # FIXME(aloga): this is a placeholder for now, change to final value when we merge
@@ -25,6 +31,8 @@ _JSON_LD_CONTEXT = {
     MetadataVersions.V2_0_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
 }
 
+app = typer.Typer(help="Support for mapping into MLDCAT-AP profile.")
+
 
 class SupportedInputProfiles(str, enum.Enum):
     """Supported input profiles for crosswalks."""
@@ -37,12 +45,6 @@ class SupportedOutputFormats(str, enum.Enum):
 
     jsonld = "jsonld"
     ttl = "ttl"
-
-
-class SupportedOutputProfiles(str, enum.Enum):
-    """Supported output profiles for crosswalks."""
-
-    mldcat = "mldcat"
 
 
 def generate_mapping(
@@ -88,3 +90,64 @@ def generate_mapping(
         return str(turtle_data)
     else:
         return json.dumps(new_meta)
+
+
+@app.command(name="mldcat", help="Map to MLDCAT-AP profile, with different renderings.")
+def _map(
+    from_file: Annotated[
+        pathlib.Path,
+        typer.Argument(help="File to map from."),
+    ],
+    to_format: Annotated[
+        SupportedOutputFormats,
+        typer.Option(
+            "--output-format",
+            help="Format to map to. Note that this depends on the input format.",
+        ),
+    ],
+    from_profile: Annotated[
+        SupportedInputProfiles,
+        typer.Option("--input-profile", help="Profile to map from."),
+    ] = SupportedInputProfiles.ai4os,
+    output: Annotated[
+        Optional[pathlib.Path],
+        typer.Option("--output", "-o", help="Output file for generated mapping."),
+    ] = None,
+    metadata_version: Annotated[
+        metadata.MetadataVersions,
+        typer.Option(help="AI4 application metadata version."),
+    ] = metadata.get_latest_version(),
+) -> None:
+    """Generate a mapping file between two formats."""
+    schema = metadata.get_schema(metadata_version)
+    try:
+        validate.validate(from_file, schema)
+    except exceptions.MetadataValidationError as e:
+        utils.format_rich_error(e)
+        raise typer.Exit(1)
+    except Exception as e:
+        utils.format_rich_error(e)
+        raise typer.Exit(4)
+
+    try:
+        from_metadata = utils.load_json(from_file)
+    except exceptions.InvalidJSONError:
+        from_metadata = utils.load_yaml(from_file)
+
+    # aux = mapping(meta, from_profile, to_format, to_profile, metadata_version)
+    try:
+        mapping = generate_mapping(
+            from_profile=from_profile,
+            from_metadata=from_metadata,
+            to_format=to_format,
+            metadata_version=metadata_version,
+        )
+    except exceptions.InvalidMappingError as e:
+        utils.format_rich_error(e)
+        raise typer.Exit(1)
+
+    if output:
+        with open(output, "wb") as f:
+            f.write(mapping.encode("utf-8"))
+    else:
+        typer.echo(mapping)
