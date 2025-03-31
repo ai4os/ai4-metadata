@@ -19,16 +19,57 @@ app = typer.Typer(help="Validate an AI4 metadata file (YAML, JSON) against the s
 def validate(
     instance: Union[dict, pathlib.Path], schema: Union[dict, pathlib.Path]
 ) -> None:
-    """Validate the schema."""
-    if isinstance(instance, pathlib.Path):
-        instance_file: Union[str, pathlib.Path] = instance
-        try:
-            instance = utils.load_json(instance_file)
-        except exceptions.InvalidJSONError:
-            instance = utils.load_yaml(instance_file)
-    else:
-        instance_file = "no-file"
+    """Validate the schema.
 
+    :param instance: JSON instance to validate or path to a file.
+    :param schema: JSON schema to validate against, or a path to a schema file.
+
+    :raises SchemaValidationError: If the schema is invalid.
+    :raises MetadataValidationError: If the metadata is invalid.
+    """
+    msg = (
+        "Using the 'validate' method is deprecated and will be removed in the next "
+        "major version of the package, please use one of "
+        "'validate_file' or 'validate_json' instead."
+    )
+    warnings.warn(msg, DeprecationWarning, stacklevel=2)
+
+    if isinstance(instance, pathlib.Path):
+        validate_file(instance, schema)
+    else:
+        validate_json(instance, schema)
+
+
+def validate_file(
+    instance_file: pathlib.Path, schema: Union[dict, pathlib.Path]
+) -> None:
+    """Validate a file against a schema.
+
+    :param instance_file: Path to the file to validate.
+    :param schema: JSON/YAML schema to validate against, or a path to a schema file.
+
+    :raises SchemaValidationError: If the schema is invalid.
+    :raises MetadataValidationError: If the metadata is invalid.
+    """
+    try:
+        instance = utils.load_json(instance_file)
+    except exceptions.InvalidJSONError:
+        instance = utils.load_yaml(instance_file)
+
+    try:
+        validate_json(instance, schema)
+    except exceptions.MetadataValidationError as e:
+        raise exceptions.MetadataValidationError(instance_file, e.e)
+
+
+def validate_json(instance: dict, schema: Union[dict, pathlib.Path]) -> None:
+    """Validate a JSON with a given schema.
+
+    :param instance: JSON instance to validate.
+    :param schema: JSON schema to validate against, or a path to a schema file.
+
+    :raises SchemaValidationError: If the schema is invalid.
+    """
     if isinstance(schema, pathlib.Path):
         schema_file: Union[str, pathlib.Path] = schema
         schema = utils.load_json(schema_file)
@@ -44,7 +85,7 @@ def validate(
     try:
         validators.validate(instance, schema)
     except jsonschema.exceptions.ValidationError as e:
-        raise exceptions.MetadataValidationError(instance_file, e)
+        raise exceptions.MetadataValidationError("no-file", e)
 
 
 @app.command(name="validate")
@@ -84,7 +125,7 @@ def _main(
     exit_code = 0
     for instance_file in instances:
         try:
-            validate(instance_file, schema_file)
+            validate_file(instance_file, schema_file)
         # NOTE(aloga): we catch the exceptions that are fatal (i.e. files not found,
         # invalid files, etc) and exit right away. For the rest of the exceptions we
         # just print the error and continue with the next file
