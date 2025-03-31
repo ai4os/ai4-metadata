@@ -38,6 +38,24 @@ def load_yaml(path: typing.Union[str, pathlib.Path]) -> typing.Dict:
         raise exceptions.InvalidYAMLError(path, e)
 
 
+def load_file(path: typing.Union[str, pathlib.Path]) -> typing.Dict:
+    """Load either a JSON or a YAML file.
+
+    If the file is not found, raise a FileNotFoundError.
+
+    :param path: The path to the file.
+    :return: The data loaded from the file.
+    """
+    try:
+        data = load_json(path)
+    except exceptions.InvalidJSONError:
+        try:
+            data = load_yaml(path)
+        except exceptions.InvalidYAMLError as e:
+            raise exceptions.InvalidFileError(path, e)
+    return data
+
+
 def dump_json(data: typing.Dict, path: typing.Optional[pathlib.Path] = None) -> None:
     """Dump a JSON object to stdout or to path if provided."""
     if path is None:
