@@ -89,4 +89,4 @@ def generate_mapping(
         turtle_data = graph.serialize(format="turtle")
         return str(turtle_data)
     else:
-        return str(new_meta)
+        return json.dumps(new_meta)
