@@ -1,0 +1,307 @@
+{
+    "$schema": "http://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/ai4os/ai4-metadata/blob/master/src/ai4_metadata/schemata/ai4-apps-v2.3.0.json",
+    "type": "object",
+    "properties": {
+        "metadata_version": {
+            "description": "Version of the metadata schema.",
+            "pattern": "^[0-9]{1,}.[0-9]{1,}.[0-9]{1,}$",
+            "example": "2.1.0",
+            "type": "string"
+        },
+        "title": {
+            "description": "Name of the Data Science application.",
+            "type": "string",
+            "user_friendly": "Title",
+            "example": "Deep Learning Model for Metadata Classification"
+        },
+        "summary": {
+            "description": "Short text describing the value of the Data Science application.",
+            "type": "string",
+            "user_friendly": "Summary",
+            "example": "This model classifies metadata using deep learning techniques."
+        },
+        "description": {
+            "description": "Elaborated description of the Data Science application.",
+            "type": "string",
+            "user_friendly": "Description",
+            "example": "This model uses a deep learning architecture to classify metadata into different categories. The model is trained on a dataset of 10,000 metadata entries and achieves an accuracy of 90%."
+        },
+        "doi" : {
+            "description": "DOI of the Data Science application.",
+            "type": "string",
+            "format": "doi",
+            "user_friendly": "Digital Object Identifier",
+            "example": "10.5281/zenodo.1234567"
+        },
+        "links": {
+            "title": "links",
+            "type": "object",
+            "properties": {
+                "self": {
+                    "description": "URL pointing to the metadata of the Data Science application.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Metadata URL",
+                    "example": "https://example.org/metadata"
+                },
+                "documentation": {
+                    "description": "URL pointing to the relevant documentation.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Documentation URL",
+                    "example": "https://example.org/docs"
+                },
+                "source_code": {
+                    "description": "URL pointing to the relevant source code.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Source Code URL",
+                    "example": "https://example.org/code"
+                },
+                "docker_image": {
+                    "description": "URL pointing to the relevant Docker image.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Docker Image URL",
+                    "example": "https://example.org/docker"
+                },
+                "zenodo_doi": {
+                    "description": "DOI of the Zenodo record.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Link to Zenodo DOI",
+                    "example": "https://doi.org/10.5281/zenodo.1234567"
+                },
+                "dataset": {
+                    "description": "URL pointing to the relevant training dataset.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Traning Dataset URL",
+                    "example": "https://example.org/dataset"
+                },
+                "weights": {
+                    "description": "URL of file containing weights from training",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Weights URL",
+                    "example": "https://example.org/weights"
+                },
+                "citation": {
+                    "description": "URL pointing to the relevant citation. Please use a Citation File Format (CFF) if possible.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Citation URL",
+                    "example": "https://example.org/citation.cff"
+                },
+                "base_model": {
+                    "description": "URL pointing to a base model if this model is a fine-tune, adaptation, etc. of another one.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Base Model URL",
+                    "example": "https://example.org/base_model"
+                }
+            },
+            "required": [
+                "source_code"
+            ]
+        },
+        "dates": {
+            "title": "dates",
+            "type": "object",
+            "properties": {
+                "created": {
+                    "description": "Creation date of the Data Science application.",
+                    "type": "string",
+                    "format": "date",
+                    "user_friendly": "Creation Date",
+                    "example": "2022-01-01"
+                },
+                "updated": {
+                    "description": "Last update date of the Data Science application.",
+                    "type": "string",
+                    "format": "date",
+                    "user_friendly": "Last Update Date",
+                    "example": "2024-12-31"
+                }
+            },
+            "required": [
+                "created",
+                "updated"
+            ]
+        },
+        "libraries": {
+            "description": "Libraries used in the Data Science application.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "enum": [
+                    "TensorFlow",
+                    "PyTorch",
+                    "Keras",
+                    "Scikit-learn",
+                    "XGBoost",
+                    "LightGBM",
+                    "CatBoost",
+                    "Other"
+                ]
+            },
+            "user_friendly": "Libraries used",
+            "example": ["TensorFlow", "PyTorch"]
+        },
+        "tasks": {
+            "description": "Topic/s for the tasks that categorize the Data Science application.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "enum": [
+                    "Computer Vision",
+                    "Natural Language Processing",
+                    "Time Series",
+                    "Recommender Systems",
+                    "Anomaly Detection",
+                    "Regression",
+                    "Classification",
+                    "Clustering",
+                    "Dimensionality Reduction",
+                    "Generative Models",
+                    "Graph Neural Networks",
+                    "Optimization",
+                    "Reinforcement Learning",
+                    "Transfer Learning",
+                    "Uncertainty Estimation",
+                    "Other"
+                ]
+            },
+            "user_friendly": "Model Tasks",
+            "example": ["Computer Vision", "Natural Language Processing"]
+        },
+        "categories": {
+            "description": "Platform categories for the tasks that categorize the Data Science application.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "enum": [
+                    "AI4 pre trained",
+                    "AI4 trainable",
+                    "AI4 inference",
+                    "AI4 tools"
+                ]
+            },
+            "user_friendly": "AI4 Platform Categories",
+            "example": ["AI4 pre trained", "AI4 trainable"]
+        },
+        "tags": {
+            "description": "User provided tags to best describe the Data Science application.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "type": "string"
+            },
+            "user_friendly": "Tags",
+            "example": ["Deep Learning", "Metadata Classification"]
+        },
+        "data-type": {
+            "description": "Data type used in the Data Science application.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "enum": [
+                    "Image",
+                    "Text",
+                    "Time Series",
+                    "Tabular",
+                    "Graph",
+                    "Audio",
+                    "Video",
+                    "Other"
+                ]
+            },
+            "user_friendly": "Data Type",
+            "example": ["Text"]
+        },
+        "resources": {
+            "description": "Resources (CPU, GPU, storage) needed for the application.",
+            "type": "object",
+            "properties": {
+                "inference": {
+                    "description": "Minimum / recommended resources needed for inference.",
+                    "$ref": "#/definitions/resource-configuration"
+                },
+                "training": {
+                    "description": "Minimum / recommended resources needed for training.",
+                    "$ref": "#/definitions/resource-configuration"
+                }
+            }
+        }
+    },
+    "required": [
+        "metadata_version",
+        "title",
+        "summary",
+        "description",
+        "links",
+        "libraries",
+        "tasks",
+        "categories",
+        "tags"
+    ],
+    "not": {
+        "anyOf": [
+            { "required": ["tosca"] },
+            { "required": ["sources"] },
+            { "required": ["dataset_url"] },
+            { "required": ["cite_url"] },
+            { "required": ["date_creation"] },
+            { "required": ["keywords"] }
+        ]
+    },
+    "definitions": {
+        "resource-configuration": {
+            "description": "Computational resources needed for the tasks",
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "description": "Number of CPUs needed for the task",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 1
+                },
+                "gpu": {
+                    "description": "Number of GPUs needed for the task",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 1
+                },
+                "memory_MB": {
+                    "description": "Memory needed for the task (in MB)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 8000
+                },
+                "gpu_memory_MB": {
+                    "description": "GPU memory needed for the task (in MB)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 8000
+                },
+                "gpu_compute_capability": {
+                    "description": "GPU compute capability needed for the task. Check https://developer.nvidia.com/cuda-gpus",
+                    "type": "number",
+                    "minimum": 0,
+                    "example": 6.1
+                },
+                "storage_MB": {
+                    "description": "Storage needed for the task (in MB)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 10000
+                }
+            }
+        }
+    }
+}
