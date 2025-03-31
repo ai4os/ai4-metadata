@@ -76,9 +76,7 @@ def generate_mapping(
     new_meta["categories"] = [
         cat.replace(" ", "_") for cat in new_meta.get("categories", [])
     ]
-    new_meta["tasks"] = [
-        task.replace(" ", "_") for task in new_meta.get("tasks", [])
-    ]
+    new_meta["tasks"] = [task.replace(" ", "_") for task in new_meta.get("tasks", [])]
     new_meta["libraries"] = [
         lib.replace(" ", "_") for lib in new_meta.get("libraries", [])
     ]
