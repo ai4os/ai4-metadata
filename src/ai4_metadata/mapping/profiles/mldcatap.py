@@ -16,10 +16,8 @@ from ai4_metadata import utils
 from ai4_metadata import validate
 
 
-_url_prefix = (
-    "https://github.com/ai4os/ai4-metadata/raw/refs/heads/master/src/"
-    "ai4_metadata/mapping/json-ld/"
-)
+# NOTE(aloga): move to GH pages or documentation as soon as possible.
+_url_prefix = "https://docs.ai4os.eu/projects/ai4-metadata/en/latest/_static/json-ld/"
 MetadataVersions = metadata.MetadataVersions
 
 _JSON_LD_CONTEXT = {
