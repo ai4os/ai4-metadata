@@ -76,12 +76,14 @@ def validate_json(instance: dict, schema: Union[dict, pathlib.Path]) -> None:
 
 @app.command(name="validate")
 def _main(
-    instances: Annotated[
+    metadata_file: Annotated[
         List[pathlib.Path],
         typer.Argument(
-            help="AI4 application metadata file to validate. The file can "
-            "be repeated to validate multiple files. Supported formats are "
+            help="AI4 application metadata file to validate. Supported formats are "
             "JSON and YAML."
+            "\n\n\n\nValidating more than one file is deprecated and will "
+            "be removed in the next major version of the package.",
+            show_default=False,
         ),
     ],
     schema: Annotated[
@@ -108,8 +110,16 @@ def _main(
     """
     schema_file = schema or metadata.get_schema(metadata_version)
 
+    if len(metadata_file) > 1:
+        msg = (
+            "Validating multiple files is deprecated and will be removed in the next "
+            "major version of the package, please validate each file separately."
+        )
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        utils.format_rich_warning(DeprecationWarning(msg))
+
     exit_code = 0
-    for instance_file in instances:
+    for instance_file in metadata_file:
         try:
             validate_file(instance_file, schema_file)
         # NOTE(aloga): we catch the exceptions that are fatal (i.e. files not found,
