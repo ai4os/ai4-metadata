@@ -11,6 +11,7 @@ app = cli.app
 
 # Test validation
 
+
 def test_cli_validate(valid_instance_files):
     """Test the CLI with a valid instance."""
     for aux in valid_instance_files:
@@ -81,7 +82,9 @@ def test_cli_unexpected_error(valid_instance_files):
 
 # Test version is eager
 
+
 def test_version():
+    """Test the version option is eager."""
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
     assert ai4_metadata.__version__ in result.stdout
