@@ -1,12 +1,12 @@
 {
     "$schema": "http://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/ai4os/ai4-metadata/blob/master/src/ai4_metadata/schemata/ai4-apps-v2.0.0.json",
+    "$id": "https://github.com/ai4os/ai4-metadata/blob/master/src/ai4_metadata/assets/schemata/ai4-apps-v2.3.0.json",
     "type": "object",
     "properties": {
         "metadata_version": {
             "description": "Version of the metadata schema.",
             "pattern": "^[0-9]{1,}.[0-9]{1,}.[0-9]{1,}$",
-            "example": "2.0.0",
+            "example": "2.1.0",
             "type": "string"
         },
         "title": {
@@ -38,6 +38,13 @@
             "title": "links",
             "type": "object",
             "properties": {
+                "self": {
+                    "description": "URL pointing to the metadata of the Data Science application.",
+                    "type": "string",
+                    "format": "uri",
+                    "user_friendly": "Metadata URL",
+                    "example": "https://example.org/metadata"
+                },
                 "documentation": {
                     "description": "URL pointing to the relevant documentation.",
                     "type": "string",
@@ -97,7 +104,7 @@
             },
             "required": [
                 "source_code"
-            ]   
+            ]
         },
         "dates": {
             "title": "dates",
@@ -216,6 +223,20 @@
             },
             "user_friendly": "Data Type",
             "example": ["Text"]
+        },
+        "resources": {
+            "description": "Resources (CPU, GPU, storage) needed for the application.",
+            "type": "object",
+            "properties": {
+                "inference": {
+                    "description": "Minimum / recommended resources needed for inference.",
+                    "$ref": "#/definitions/resource-configuration"
+                },
+                "training": {
+                    "description": "Minimum / recommended resources needed for training.",
+                    "$ref": "#/definitions/resource-configuration"
+                }
+            }
         }
     },
     "required": [
@@ -229,7 +250,7 @@
         "categories",
         "tags"
     ],
-    "not": { 
+    "not": {
         "anyOf": [
             { "required": ["tosca"] },
             { "required": ["sources"] },
@@ -238,5 +259,49 @@
             { "required": ["date_creation"] },
             { "required": ["keywords"] }
         ]
+    },
+    "definitions": {
+        "resource-configuration": {
+            "description": "Computational resources needed for the tasks",
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "description": "Number of CPUs needed for the task",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 1
+                },
+                "gpu": {
+                    "description": "Number of GPUs needed for the task",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 1
+                },
+                "memory_MB": {
+                    "description": "Memory needed for the task (in MB)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 8000
+                },
+                "gpu_memory_MB": {
+                    "description": "GPU memory needed for the task (in MB)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 8000
+                },
+                "gpu_compute_capability": {
+                    "description": "GPU compute capability needed for the task. Check https://developer.nvidia.com/cuda-gpus",
+                    "type": "number",
+                    "minimum": 0,
+                    "example": 6.1
+                },
+                "storage_MB": {
+                    "description": "Storage needed for the task (in MB)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 10000
+                }
+            }
+        }
     }
 }

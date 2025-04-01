@@ -7,8 +7,8 @@ import pytest
 from ai4_metadata import utils
 
 
-SCHEMATA_DIR = pathlib.Path(__file__).parent / "../schemata/"
-INSTANCES_DIR = pathlib.Path(__file__).parent / "../../../instances/"
+SCHEMATA_DIR = pathlib.Path(__file__).parent / "../assets/schemata/"
+INSTANCES_DIR = pathlib.Path(__file__).parent / "../assets/examples/"
 
 
 @pytest.fixture(scope="module")
