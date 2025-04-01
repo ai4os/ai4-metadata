@@ -29,7 +29,7 @@ _metadata_version_files = {}
 for version in MetadataVersions:
     _metadata_version_files[version] = pathlib.Path(
         pathlib.Path(__file__).parent
-        / f"schemata/ai4-apps-v{version._value_}.json"  # noqa(W503)
+        / f"assets/schemata/ai4-apps-v{version._value_}.json"  # noqa(W503)
     )
 
 

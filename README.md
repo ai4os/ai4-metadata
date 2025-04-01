@@ -32,39 +32,39 @@ The metadata utilities provide a subcommand `ai4-metadata validate` that can be
 used to validate the metadata files. The CLI tool accepts the metadata files as
 input parameters.
 
-    $ ai4-metadata validate instances/sample-v2.mods.json
+    $ ai4-metadata validate src/assets/examples/sample-v2.mods.json
     ╭─ Success ──────────────────────────────────────────────────────────────────╮
-    │ 'instances/sample-v2.mods.json' is valid for version 2.0.0                 │
+    │ 'src/assets/examples/sample-v2.mods.json' is valid for version 2.0.0       │
     ╰────────────────────────────────────────────────────────────────────────────╯
 
 Different metadata versions can be specified, either by using the
 `--metadata-version` or by providing the metadata schema file. The following
 two executions are equivalent:
 
-    $ ai4-metadata validate --metadata-version 2.0.0 instances/sample-v2.mods.json
+    $ ai4-metadata validate --metadata-version 2.0.0 src/assets/examples/sample-v2.mods.json
     ╭─ Success ──────────────────────────────────────────────────────────────────╮
-    │ 'instances/sample-v2.mods.json' is valid for version 2.0.0                 │
+    │ 'src/assets/examples/sample-v2.mods.json' is valid for version 2.0.0       │
     ╰────────────────────────────────────────────────────────────────────────────╯
-    $ ai4-metadata validate --schema schemata/ai4-apps-v2.0.0.json instances/sample-v2.mods.json
+    $ ai4-metadata validate --schema schemata/ai4-apps-v2.0.0.json src/assets/examples/sample-v2.mods.json
     ╭─ Success ──────────────────────────────────────────────────────────────────╮
-    │ 'instances/sample-v2.mods.json' is valid for version 2.0.0                 │
+    │ 'src/assets/examples/sample-v2.mods.json' is valid for version 2.0.0       │
     ╰────────────────────────────────────────────────────────────────────────────╯
-    $ ai4-metadata validate --metadata-version 1.0.0 instances/sample-v2.mods.json
+    $ ai4-metadata validate --metadata-version 1.0.0 src/assets/examples/sample-v2.mods.json
     ╭─ Error ────────────────────────────────────────────────────────────────────╮
-    │ Error validating instance 'instances/sample-v2.mods.json': 'date_creation' │
-    │ is a required property                                                     │
+    │ Error validating instance 'src/assets/examples/sample-v2.mods.json':       │
+    │ 'date_creation' is a required property                                     │
     ╰────────────────────────────────────────────────────────────────────────────╯
 
 Metadata files can be present in either JSON or YAML format. The metadata
 utilities will automatically detect the format.
 
-    $ ai4-metadata validate instances/sample-v2.mods.yaml
+    $ ai4-metadata validate src/assets/examples/sample-v2.mods.yaml
     ╭─ Success ──────────────────────────────────────────────────────────────────╮
-    │ 'instances/sample-v2.mods.yaml' is valid for version 2.0.0                 │
+    │ 'src/assets/examples/sample-v2.mods.yaml' is valid for version 2.0.0       │
     ╰────────────────────────────────────────────────────────────────────────────╯
-    $ ai4-metadata validate instances/sample-v2.mods.json
+    $ ai4-metadata validate src/assets/examples/sample-v2.mods.json
     ╭─ Success ──────────────────────────────────────────────────────────────────╮
-    │ 'instances/sample-v2.mods.json' is valid for version 2.0.0                 │
+    │ 'src/assets/examples/sample-v2.mods.json' is valid for version 2.0.0       │
     ╰────────────────────────────────────────────────────────────────────────────╯
 
 ### Metadata mapping between different profiles and formats
@@ -86,8 +86,8 @@ In order to map the `ai4` metadata into the MLDCAT-AP profile you can use the
 `ai4` metadata format (YAML or JSON). You can specify what format the metadata
 should be rendered into, either JSON-LD (`jsonld`) or RD Turtle (`ttl`).
 
-    $ ai4-metadata map mldcat instances/sample-v2.mods.json --output-format jsonld --output sample-v2.mldcat.jsonld
-    $ ai4-metadata map mldcat instances/sample-v2.mods.json --output-format ttl --output sample-v2.mldcat.ttl
+    $ ai4-metadata map mldcat src/assets/examples/sample-v2.mods.json --output-format jsonld --output sample-v2.mldcat.jsonld
+    $ ai4-metadata map mldcat src/assets/examples/sample-v2.mods.json --output-format ttl --output sample-v2.mldcat.ttl
 
 ### Metadata migration
 
@@ -95,9 +95,9 @@ The metadata utilities provide a subcommand `ai4-metadata migrate` that can be
 used to migrate the metadata files from V1 to latest V2. To save the output,
 use the `--output` option.
 
-    $ ai4-metadata migrate --output sample-v2.mods.json instances/sample-v1.mods.json
+    $ ai4-metadata migrate --output sample-v2.mods.json src/assets/examples/sample-v1.mods.json
     ╭─ Success ──────────────────────────────────────────────────────────────────╮
-    │ V1 metadata 'instances/sample-v1.mods.json' migrated to version            │
+    │ V1 metadata 'src/assets/examples/sample-v1.mods.json' migrated to version  │
     │ MetadataVersions.V2 and stored in 'sample-v2.mods.json'                    │
     ╰────────────────────────────────────────────────────────────────────────────╯
 
