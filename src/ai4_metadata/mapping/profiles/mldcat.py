@@ -133,7 +133,6 @@ def _map(
     except exceptions.InvalidJSONError:
         from_metadata = utils.load_yaml(from_file)
 
-    # aux = mapping(meta, from_profile, to_format, to_profile, metadata_version)
     try:
         mapping = generate_mapping(
             from_profile=from_profile,
