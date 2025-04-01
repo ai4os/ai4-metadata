@@ -91,7 +91,9 @@ def generate_mapping(
         return json.dumps(new_meta)
 
 
-@app.command(name="mldcat", help="Map to MLDCAT-AP profile, with different renderings.")
+@app.command(
+    name="mldcat-ap", help="Map to MLDCAT-AP profile, with different renderings."
+)
 def _map(
     from_file: Annotated[
         pathlib.Path,
