@@ -1,5 +1,5 @@
 """Profiles to map from and to."""
 
-from . import mldcat
+from . import mldcatap
 
-__all__ = ["mldcat"]
+__all__ = ["mldcatap"]
