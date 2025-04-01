@@ -44,33 +44,32 @@ def generate(
 
 
 def _get_field_value(value: dict, sample_values: bool = False) -> Any:
-    """Get the value of a field."""
-    if value.get("type") == "object":
-        required = value.get("required", [])
+    """Get the value of a field based on its type definition."""
+    # Get the field type, default to string if not specified
+    field_type = value.get("type", "string")
 
+    # Handle different field types
+    if field_type == "object":
+        result = collections.OrderedDict()
+
+        # Get properties to include
         properties = value.get("properties", {})
-        if required:
-            properties = {k: v for k, v in properties.items() if k in required}
+        if value.get("required"):
+            properties = {k: v for k, v in properties.items() if k in value["required"]}
 
-        aux = collections.OrderedDict()
-        for key, sub_value in properties.items():
-            aux[key] = _get_field_value(sub_value, sample_values)
-        return aux
-    elif value.get("type") == "array":
-        if sample_values:
-            return value.get("example", [])
-        else:
-            return []
-    elif value.get("type") in ["integer", "number"]:
-        if sample_values:
-            return value.get("example", 0)
-        else:
-            return 0
-    else:
-        if sample_values:
-            return value.get("example", "")
-        else:
-            return ""
+        # Process each property
+        for key, prop in properties.items():
+            result[key] = _get_field_value(prop, sample_values)
+        return result
+
+    elif field_type == "array":
+        return value.get("example", []) if sample_values else []
+
+    elif field_type in ["integer", "number"]:
+        return value.get("example", 0) if sample_values else 0
+
+    else:  # string, boolean, null, etc.
+        return value.get("example", "") if sample_values else ""
 
 
 @app.command(name="generate")
