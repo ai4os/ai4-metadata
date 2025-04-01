@@ -71,8 +71,9 @@ def generate_mapping(
     new_meta["uri"] = uri
     new_meta["type"] = "MachineLearningModel"
 
-    # FIXME(aloga): we replace this here, manually, but ai4os metadata should be
-    # fixed to use the correct format, and not use strings but objects.
+    # NOTE(aloga): we replace this here, manually, but ai4os metadata should be
+    # fixed to use the correct format, and not use strings but objects. However, we
+    # can leave as it is for now, in order not to break things.
     new_meta["categories"] = [
         cat.replace(" ", "_") for cat in new_meta.get("categories", [])
     ]
