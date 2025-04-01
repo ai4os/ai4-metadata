@@ -16,10 +16,8 @@ from ai4_metadata import utils
 from ai4_metadata import validate
 
 
-# FIXME(aloga): this is a placeholder for now, change to final value when we merge
-# the code in the main branch
 _url_prefix = (
-    "https://github.com/ai4os/ai4-metadata/raw/refs/heads/mldcat-ap/src/"
+    "https://github.com/ai4os/ai4-metadata/raw/refs/heads/master/src/"
     "ai4_metadata/mapping/json-ld/"
 )
 MetadataVersions = metadata.MetadataVersions
