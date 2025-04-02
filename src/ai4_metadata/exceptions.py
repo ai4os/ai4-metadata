@@ -36,6 +36,17 @@ class InvalidFileError(BaseExceptionError):
         super().__init__(self.message.format(f=f, e=e))
 
 
+class InvalidMetadataVersionError(BaseExceptionError):
+    """Exception raised when a metadata version is invalid."""
+
+    message = "Invalid metadata version '{version}'."
+
+    def __init__(self, version: str):
+        """Initialize the exception."""
+        self.version = version
+        super().__init__(self.message.format(version=version))
+
+
 class InvalidMetadataError(BaseExceptionError):
     """Exception raised when a metadata file is invalid."""
 
