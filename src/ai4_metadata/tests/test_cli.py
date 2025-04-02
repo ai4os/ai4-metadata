@@ -1,5 +1,7 @@
 """Unit tests for the command line interface."""
 
+import itertools
+
 import typer.testing
 
 import ai4_metadata
@@ -88,3 +90,41 @@ def test_version():
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
     assert ai4_metadata.__version__ in result.stdout
+
+
+# Test mapping generation
+
+# MLDCAT-AP
+
+
+def test_mldcat_app_generate_mapping(valid_instance_files):
+    """Test the CLI with a valid instance."""
+    formats = ["jsonld", "ttl"]
+    for aux_file, output in itertools.product(valid_instance_files, formats):
+        result = runner.invoke(
+            app,
+            [
+                "map",
+                "mldcat-ap",
+                aux_file.as_posix(),
+                "--output-format",
+                output,
+            ],
+        )
+        assert result.exit_code == 0
+
+
+def test_mldcat_app_invalid_metadata(invalid_instance_files):
+    """Test the CLI with an invalid instance."""
+    for aux in invalid_instance_files:
+        result = runner.invoke(
+            app,
+            [
+                "map",
+                "mldcat-ap",
+                aux.as_posix(),
+                "--output-format",
+                "jsonld",
+            ],
+        )
+        assert result.exit_code == 1

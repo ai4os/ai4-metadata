@@ -22,10 +22,20 @@ MetadataVersions = metadata.MetadataVersions
 
 _JSON_LD_CONTEXT = {
     MetadataVersions.V2: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
+    MetadataVersions.V2_3_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
     MetadataVersions.V2_2_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
     MetadataVersions.V2_1_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
     MetadataVersions.V2_0_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
 }
+
+
+def get_context_for_version(version: MetadataVersions) -> str:
+    """Get the context for a given version."""
+    try:
+        return _JSON_LD_CONTEXT[version]
+    except KeyError:
+        raise exceptions.InvalidMetadataVersionError(version)
+
 
 app = typer.Typer(help="Support for mapping into MLDCAT-AP profile.")
 
@@ -65,7 +75,7 @@ def generate_mapping(
         uri = from_metadata.get("links", {}).get("source_code", "")
 
     new_meta = copy.deepcopy(from_metadata)
-    new_meta["@context"] = _JSON_LD_CONTEXT[metadata_version]
+    new_meta["@context"] = get_context_for_version(metadata_version)
     new_meta["uri"] = uri
     new_meta["type"] = "MachineLearningModel"
 

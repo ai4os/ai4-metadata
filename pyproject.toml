@@ -90,6 +90,14 @@ sphinx = "^8.2.3"
 sphinx-copybutton = "^0.5.2"
 piccolo-theme = "^0.24.0"
 
+
+[tool.poetry.group.tests.dependencies]
+pyld = "^2.0.4"
+
+
+[tool.poetry.group.mypy.dependencies]
+types-requests = "^2.32.0.20250328"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
