@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/ai4os/ai4-metadata/blob/master/src/ai4_metadata/assets/schemata/ai4-apps-v2.0.0.json",
+    "$id": "https://docs.ai4os.eu/projects/ai4-metadata/en/latest/_static/schemata/ai4-apps-v2.0.0.json",
     "type": "object",
     "properties": {
         "metadata_version": {
