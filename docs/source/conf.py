@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'ai4-metadata'
+project = 'AI4OS/AI4EOSC'
 copyright = '2025, AI4EOSC Consortium'
 author = 'AI4EOSC Consortium'
 
@@ -17,10 +17,14 @@ extensions = [
     "sphinx_copybutton",
 ]
 
+# In code blocks, the copy button will exclude:
+#   .lineos: line numbers
+#   .gp: prompts
+#   .go: console outputs
+copybutton_exclude = '.linenos, .gp, .go'
+
 templates_path = ['_templates']
 exclude_patterns = []
-
-
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
