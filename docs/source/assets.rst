@@ -13,8 +13,6 @@ JSON Schema definition (schemata)
 * `Version 2.2.0 <_static/schemata/ai4-apps-v2.2.0.json>`_
 * `Version 2.3.0 <_static/schemata/ai4-apps-v2.3.0.json>`_
 
-All versions are available in the `following directory <_static/schemata>`_.
-
 JSON-LD Context definition (contexts)
 -------------------------------------
 
