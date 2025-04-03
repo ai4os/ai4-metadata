@@ -1,5 +1,7 @@
 """Test the utils module."""
 
+import json
+
 import pytest
 
 from ai4_metadata import exceptions
@@ -43,3 +45,19 @@ def test_load_file(valid_instance_files):
     """Test the load_file method."""
     for aux in valid_instance_files:
         assert utils.load_file(aux) is not None
+
+
+def test_dump_json():
+    """Test the dump_json method."""
+    data = {"key": "value"}
+    assert utils.dump_json(data) is None
+
+
+def test_dump_json_to_file(tmp_path):
+    """Test the dump_json method with a file."""
+    data = {"key": "value"}
+    file_path = tmp_path / "test.json"
+    utils.dump_json(data, file_path)
+    assert file_path.exists()
+    with open(file_path, "r") as f:
+        assert json.loads(f.read()) == {"key": "value"}
