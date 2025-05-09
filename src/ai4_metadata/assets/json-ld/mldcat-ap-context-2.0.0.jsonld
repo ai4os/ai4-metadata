@@ -45,7 +45,8 @@
 		},
 		"citation" : {
 			"@id" : "it6:hasBibliographicReference",
-			"@type" : "@id"
+			"@type" : "@id",
+			"@container" : "@set"
 		},
 		"base_model" : {
 			"@id" : "it6:fineTunedFrom",
@@ -53,34 +54,40 @@
 		},
 		"tags" : {
 			"@id" : "dcat:keyword",
-			"@language" : "en"
+			"@language" : "en",
+			"@container" : "@set"
 		},
 		"tasks" : {
 			"@id" : "it6:hasTaskType",
 			"@type" : "@id",
 			"@context" : {
-				"@base" : "https://api.cloud.ai4eosc.eu/v1/catalog/tasktype/"
-			}
+				"@base" : "https://api.cloud.ai4eosc.eu/v1/catalog/tasktype/",
+				"@language" : "en"
+			},
+			"@container" : "@set"
 		},
 		"categories" : {
 			"@id" : "dct:type",
 			"@type" : "@id",
 			"@context" : {
 				"@base" : "https://api.cloud.ai4eosc.eu/v1/catalog/category/"
-			}
+			},
+			"@container" : "@set"
 		},
 		"libraries" : {
 			"@id" : "it6:hasMachineLearningLibrary",
 			"@type" : "@id",
 			"@context" : {
 				"@base" : "https://api.cloud.ai4eosc.eu/v1/catalog/library/"
-		   }
+		   },
+			"@container" : "@set"
 		},
 		"license" : {
 			"@id" : "dct:license",
 			"@type" : "@id",
 			"@context" : {
-				"@base" : "http://publications.europa.eu/resource/authority/licence/"
+				"@base" : "http://publications.europa.eu/resource/authority/licence/",
+				"LicenseDocument": "http://purl.org/dc/terms/LicenseDocument"
 			}
 		},
 		"type" : "@type",
