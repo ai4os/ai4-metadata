@@ -5,7 +5,7 @@ import enum
 import json
 import pathlib
 from typing_extensions import Annotated
-from typing import Optional
+from typing import Optional, Union
 
 import typer
 import rdflib
@@ -79,16 +79,22 @@ def generate_mapping(
     new_meta["uri"] = uri
     new_meta["type"] = "MachineLearningModel"
 
-    # NOTE(aloga): we replace this here, manually, but ai4os metadata should be
-    # fixed to use the correct format, and not use strings but objects. However, we
-    # can leave as it is for now, in order not to break things.
-    new_meta["categories"] = [
-        cat.replace(" ", "_") for cat in new_meta.get("categories", [])
-    ]
-    new_meta["tasks"] = [task.replace(" ", "_") for task in new_meta.get("tasks", [])]
-    new_meta["libraries"] = [
-        lib.replace(" ", "_") for lib in new_meta.get("libraries", [])
-    ]
+    links = new_meta.pop("links", {})
+    new_meta["links"] = {}
+    for key, value in links.items():
+        new_meta["links"][key] = format_link(key, value)
+
+    for key in ["categories", "tasks", "libraries"]:
+        old_meta = new_meta.pop(key, [])
+        new_meta[key] = [as_object(cat, key) for cat in old_meta]
+
+    license_ = new_meta.pop("license", None)
+    if license_:
+        new_meta["license"] = {
+            "uri": license_.replace(" ", "_"),
+            "title": license_,
+            "type": "LicenseDocument",
+        }
 
     if to_format == SupportedOutputFormats.ttl:
         graph = rdflib.Graph()
@@ -97,6 +103,45 @@ def generate_mapping(
         return str(turtle_data)
     else:
         return json.dumps(new_meta)
+
+
+def format_link(key: str, value: str) -> Union[str, dict]:
+    """Format a link to a URI object."""
+    if key == "source_code":
+        return {
+            "uri": value,
+            "type": "Repository",
+            "title": "Source code",
+        }
+    elif key == "docker_image":
+        return {
+            "uri": value,
+            "type": "Repository",
+            "title": "Docker image",
+        }
+    elif key == "dataset":
+        return {
+            "uri": value,
+            "type": "Dataset",
+            "title": "Dataset",
+        }
+    else:
+        return value
+
+
+def as_object(object_name: str, object_category: str) -> dict:
+    """Convert a dictionary to an object with a given type."""
+    object_type_map = {
+        "categories": "Concept",
+        "tasks": "TaskType",
+        "libraries": "Library",
+    }
+
+    return {
+        "uri": object_name.replace(" ", "_"),
+        "title": object_name,
+        "type": object_type_map.get(object_category, "Concept"),
+    }
 
 
 @app.command(
