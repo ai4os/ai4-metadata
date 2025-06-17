@@ -75,9 +75,9 @@ def _get_field_value(value: dict, sample_values: bool = False) -> Any:
 @app.command(name="generate")
 def _main(
     metadata_version: Annotated[
-        metadata.MetadataVersions,
-        typer.Option(help="AI4 application metadata version."),
-    ] = metadata.get_latest_version(),
+        Optional[metadata.MetadataVersions],
+        typer.Option(help="AI4 application metadata version. Defaults to the latest."),
+    ] = None,
     sample_values: Annotated[
         bool, typer.Option("--sample-values", help="Generate sample values.")
     ] = False,
@@ -90,6 +90,8 @@ def _main(
     ] = None,
 ):
     """Generate an AI4 metadata schema."""
+    if metadata_version is None:
+        metadata_version = metadata.get_latest_version()
     schema = metadata.get_schema(metadata_version)
 
     try:

@@ -14,7 +14,7 @@ from ai4_metadata import utils
 class MetadataVersions(str, enum.Enum):
     """Available versions of the AI4 metadata schema."""
 
-    V2 = "2.2.0"
+    V2 = "2.3.0"
     V2_3_0 = "2.3.0"
     V2_2_0 = "2.2.0"
     V2_1_0 = "2.1.0"
@@ -76,7 +76,7 @@ def get_schema_from_metadata(metadata: dict) -> dict:
 
 
 def get_validator_for_schema(
-    schema: Union[dict, pathlib.Path]
+    schema: Union[dict, pathlib.Path],
 ) -> jsonschema.protocols.Validator:
     """Get the validator for a given schema.
 

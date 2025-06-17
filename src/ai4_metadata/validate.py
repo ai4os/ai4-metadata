@@ -91,9 +91,9 @@ def _main(
         typer.Option(help="AI4 application metadata schema file to use."),
     ] = None,
     metadata_version: Annotated[
-        metadata.MetadataVersions,
-        typer.Option(help="AI4 application metadata version."),
-    ] = metadata.get_latest_version(),
+        Optional[metadata.MetadataVersions],
+        typer.Option(help="AI4 application metadata version. Defaults to the latest."),
+    ] = None,
     quiet: Annotated[
         bool, typer.Option("--quiet", "-q", help="Suppress output for valid instances.")
     ] = False,
@@ -108,6 +108,8 @@ def _main(
 
     If you provide the --shema option, it will override the --metadata-version option.
     """
+    if metadata_version is None:
+        metadata_version = metadata.get_latest_version()
     schema_file = schema or metadata.get_schema(metadata_version)
 
     if len(metadata_file) > 1:
