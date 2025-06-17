@@ -15,6 +15,7 @@ author = 'AI4EOSC Consortium'
 
 extensions = [
     "sphinx_copybutton",
+    "ai4_metadata.sphinxext",
 ]
 
 # In code blocks, the copy button will exclude:

@@ -12,10 +12,15 @@ Work in progress...
    :caption: Assets:
 
    assets.rst
-   assets/codelist/index.rst
 
 .. toctree::
    :maxdepth: 2
    :caption: Code and examples:
 
    examples.rst
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Reference:
+
+   reference/index.rst
