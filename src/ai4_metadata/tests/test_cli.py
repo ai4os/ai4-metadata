@@ -37,7 +37,7 @@ def test_cli_validate_list_deprecated(valid_instance_files):
     )
     assert result.exit_code == 0
     assert "Success" in result.stdout
-    assert "Warning" in result.stdout
+    assert "Warning" in result.stderr
 
 
 def test_cli_metadata_file_not_found(not_found_instance_files):
@@ -45,7 +45,7 @@ def test_cli_metadata_file_not_found(not_found_instance_files):
     for aux in not_found_instance_files:
         result = runner.invoke(app, ["validate", aux.as_posix()])
         assert result.exit_code == 2
-        assert "Error" in result.stdout
+        assert "Error" in result.stderr
 
 
 def test_cli_metadata_file_not_found_quiet(not_found_instance_files):
@@ -53,7 +53,7 @@ def test_cli_metadata_file_not_found_quiet(not_found_instance_files):
     for aux in not_found_instance_files:
         result = runner.invoke(app, ["validate", aux.as_posix(), "--quiet"])
         assert result.exit_code == 2
-        assert "Error" in result.stdout
+        assert "Error" in result.stderr
 
 
 def test_cli_invalid_instance(invalid_instance_files):
@@ -61,7 +61,7 @@ def test_cli_invalid_instance(invalid_instance_files):
     for aux in invalid_instance_files:
         result = runner.invoke(app, ["validate", aux.as_posix()])
         assert result.exit_code == 1
-        assert "Error" in result.stdout
+        assert "Error" in result.stderr
 
 
 def test_cli_invalid_schema(invalid_schema_file, valid_instance_files):
@@ -71,7 +71,7 @@ def test_cli_invalid_schema(invalid_schema_file, valid_instance_files):
             app, ["validate", aux.as_posix(), "--schema", invalid_schema_file]
         )
         assert result.exit_code == 3
-        assert "Error" in result.stdout
+        assert "Error" in result.stderr
 
 
 def test_cli_unexpected_error(valid_instance_files):
@@ -79,7 +79,7 @@ def test_cli_unexpected_error(valid_instance_files):
     for aux in valid_instance_files:
         result = runner.invoke(app, ["validate", aux.as_posix(), "--schema", "."])
         assert result.exit_code == 4
-        assert "Error" in result.stdout
+        assert "Error" in result.stderr
 
 
 # Test version is eager

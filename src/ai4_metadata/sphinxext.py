@@ -32,8 +32,8 @@ _NAMESPACES = {
 }
 
 
-class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
-    """
+class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
+    """Sphinx directive to include a vocabulary.
 
     Usage:
     .. skos-vocabulary:: vocabulary_name
@@ -56,7 +56,6 @@ class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
     def run(self) -> List[nodes.Node]:
         """Run the directive to generate the SKOS vocabulary page."""
-
         vocabulary_name = self.arguments[0]
         vocabulary_name_normalized = vocabulary_name.strip().lower().replace(" ", "-")
         source_path = pathlib.Path(self.options.get("source", "not provided"))
@@ -65,7 +64,8 @@ class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
         if namespace not in _NAMESPACES:
             LOG.error(
-                f"Invalid namespace '{namespace}'. Available namespaces: {list(_NAMESPACES.keys())}"
+                f"Invalid namespace '{namespace}'. "
+                f"Available namespaces: {list(_NAMESPACES.keys())}"
             )
             return self._create_error_section(f"Invalid namespace '{namespace}'.")
 
@@ -117,9 +117,6 @@ class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
             section += subsection
 
-            # # Add vocabulary information
-            # self._add_vocabulary_info(section, vocabulary_name, source_path, rdf_format, graph)
-
             self._format_section(section, namespace, graph)
 
             LOG.info(
@@ -132,18 +129,19 @@ class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
             return self._create_error_section(f"Source file not found: {source_path}")
         except Exception as e:
             LOG.error(f"SKOS Directive error: {e}")
-            return self._create_error_section(e)
+            return self._create_error_section(str(e))
 
-    def _get_it6_concepts(self, section: nodes.section, graph: rdflib.Graph) -> None:
+    def _get_it6_concepts(
+        self, section: nodes.section, graph: rdflib.Graph
+    ) -> Dict[str, Any]:
         """Add a section for IT6 concepts."""
-
         # NOTE(aloga): Only IT6.Library is supported for now, but we can extend this to
         # other IT6 concepts in the future.
         subjects = list(graph.subjects(predicate=RDF.type, object=IT6.Library))
-        aux = collections.OrderedDict()
-        for subject in sorted(subjects):
+
+        aux: collections.OrderedDict[str, Dict[str, Any]] = collections.OrderedDict()
+        for subject in sorted(subjects, key=lambda node: str(node)):
             title = graph.value(subject=subject, predicate=DCT.title)
-            version = graph.value(subject=subject, predicate=IT6.version)
             if title is None:
                 title = subject
             aux[str(title)] = {"uri": str(subject), "attr": {}}
@@ -156,14 +154,14 @@ class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
                 aux[str(title)]["attr"][str(pred)] = [str(value) for value in values]
         return aux
 
-    def _get_skos_concepts(self, section: nodes.section, graph: rdflib.Graph) -> None:
+    def _get_skos_concepts(
+        self, section: nodes.section, graph: rdflib.Graph
+    ) -> Dict[str, Any]:
         """Add a section for vocabulary concepts."""
-
         subjects = list(graph.subjects(predicate=RDF.type, object=SKOS.Concept))
-        # Create a sorted dict, that will be as follows
-        # aux = {"label": {"uri": "uri", attributes: {"attribute": "value"}}}
-        aux = collections.OrderedDict()
-        for subject in sorted(subjects):
+
+        aux: collections.OrderedDict[str, Dict[str, Any]] = collections.OrderedDict()
+        for subject in sorted(subjects, key=lambda node: str(node)):
             LOG.debug(f"Found SKOS concept: {subject}")
             label = graph.value(subject=subject, predicate=SKOS.prefLabel)
             if label is None:
@@ -241,7 +239,6 @@ class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
     def _create_error_section(self, error_message: str) -> List[nodes.Node]:
         """Create an error section when something goes wrong."""
-
         error_section = nodes.section(ids=["skos-error"])
         error_section["names"] = ["skos-error"]
 
@@ -257,9 +254,8 @@ class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
 
 def setup(app: sphinx.application.Sphinx) -> Dict[str, Any]:
-    """Setup function for the Sphinx extension"""
-
-    app.add_directive("skos-vocabulary", SKOSVocabularyDirective)
+    """Install the Sphinx extension."""
+    app.add_directive("rdf-vocabulary", VocabularyDirective)
 
     meta = {
         "version": ai4_metadata.__version__,

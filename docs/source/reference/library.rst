@@ -1,4 +1,4 @@
-.. skos-vocabulary:: Library
-   :source: ../../src/ai4_metadata/assets/skos/ai4eosc-library.ttl
+.. rdf-vocabulary:: Library
+   :source: ../../src/ai4_metadata/assets/rdf/ai4eosc-library.ttl
    :format: turtle
    :namespace: IT6

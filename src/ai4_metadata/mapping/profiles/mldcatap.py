@@ -168,12 +168,15 @@ def _map(
         typer.Option("--output", "-o", help="Output file for generated mapping."),
     ] = None,
     metadata_version: Annotated[
-        metadata.MetadataVersions,
-        typer.Option(help="AI4 application metadata version."),
-    ] = metadata.get_latest_version(),
+        Optional[metadata.MetadataVersions],
+        typer.Option(help="AI4 application metadata version. Defaults to the latest."),
+    ] = None,
 ) -> None:
     """Generate a mapping file between two formats."""
+    if metadata_version is None:
+        metadata_version = metadata.get_latest_version()
     schema = metadata.get_schema(metadata_version)
+
     try:
         validate.validate(from_file, schema)
     except exceptions.MetadataValidationError as e:
