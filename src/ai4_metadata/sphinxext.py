@@ -206,11 +206,17 @@ class SKOSVocabularyDirective(sphinx.util.docutils.SphinxDirective):
                 f"Processing vocabulary entry: {entry_label} with values: {entry_vals}"
             )
 
-            # Create a list item for each concept
-            concept_node = nodes.list_item()
-
             uri = entry_vals["uri"]
             attributes = entry_vals["attr"]
+            notation = attributes.get(str(SKOS.notation), None)
+            if notation is None:
+                LOG.info(
+                    f"'{entry_label}' does not have SKOS concept notation, using label."
+                )
+                notation = entry_label.strip().replace(" ", "_")
+
+            # Create a list item for each concept
+            concept_node = nodes.list_item(ids=[f"{notation}"])
 
             # Add raw HTML for the link
             raw_html = f'<a href="{uri}" target="_blank">{entry_label}</a>'
