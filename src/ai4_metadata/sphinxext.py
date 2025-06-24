@@ -55,7 +55,7 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
     }
 
     def run(self) -> List[nodes.Node]:
-        """Run the directive to generate the SKOS vocabulary page."""
+        """Run the directive to generate the vocabulary page."""
         vocabulary_name = self.arguments[0]
         vocabulary_name_normalized = vocabulary_name.strip().lower().replace(" ", "-")
         source_path = pathlib.Path(self.options.get("source", "not provided"))
@@ -214,7 +214,7 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
                 notation = entry_label.strip().replace(" ", "_")
 
             # Create a list item for each concept
-            concept_node = nodes.list_item(ids=[f"{notation}"])
+            concept_node = nodes.list_item(id=f"{notation}")
 
             # Add raw HTML for the link
             raw_html = f'<a href="{uri}" target="_blank">{entry_label}</a>'
@@ -239,10 +239,10 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
     def _create_error_section(self, error_message: str) -> List[nodes.Node]:
         """Create an error section when something goes wrong."""
-        error_section = nodes.section(ids=["skos-error"])
-        error_section["names"] = ["skos-error"]
+        error_section = nodes.section(ids=["error"])
+        error_section["names"] = ["error"]
 
-        error_title = nodes.title("SKOS Vocabulary Error", "SKOS Vocabulary Error")
+        error_title = nodes.title("Vocabulary Error", "Vocabulary Error")
         error_section += error_title
 
         error_para = nodes.paragraph()
