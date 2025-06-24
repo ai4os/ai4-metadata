@@ -17,7 +17,7 @@ from ai4_metadata import validate
 
 
 # NOTE(aloga): move to GH pages or documentation as soon as possible.
-_url_prefix = "https://docs.ai4os.eu/projects/ai4-metadata/en/latest/_static/json-ld"
+_url_prefix = "https://docs.ai4os.eu/projects/ai4-metadata/latest/_static/json-ld"
 MetadataVersions = metadata.MetadataVersions
 
 _JSON_LD_CONTEXT = {
