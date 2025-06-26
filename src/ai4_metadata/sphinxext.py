@@ -115,6 +115,14 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
             )
             subsection += details_para
 
+            link_para = nodes.paragraph()
+            link_para += nodes.Text("Source: ")
+            static_link = f"_static/{source_path}"
+            link_para += nodes.reference(
+                refuri=static_link, reftitle="Source RDF", text="RDF file."
+            )
+            subsection += link_para
+
             section += subsection
 
             self._format_section(section, namespace, graph)
