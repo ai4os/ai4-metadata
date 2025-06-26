@@ -79,6 +79,8 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
         LOG.info(f"Format: {rdf_format}")
         LOG.info(f"Base URI: {base_uri}")
 
+        static_path = pathlib.Path("_static") / source_path
+
         if not source_path.is_absolute():
             source_path = self.env.srcdir / source_path
 
@@ -117,10 +119,8 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
             link_para = nodes.paragraph()
             link_para += nodes.Text("Source: ")
-            # Use Pathlib to join the static path with the static path
-            link = pathlib.Path("_static") / source_path
             link_para += nodes.reference(
-                refuri=link.as_posix(), reftitle="Source RDF", text="RDF file."
+                refuri=static_path.as_posix(), reftitle="Source RDF", text="RDF file."
             )
             subsection += link_para
 
