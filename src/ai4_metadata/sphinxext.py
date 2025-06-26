@@ -49,6 +49,7 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
     option_spec = {
         "source": directives.unchanged_required,
+        "static": directives.unchanged,
         "format": directives.unchanged,
         "namespace": directives.unchanged,
         "base-uri": directives.unchanged,
@@ -59,6 +60,7 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
         vocabulary_name = self.arguments[0]
         vocabulary_name_normalized = vocabulary_name.strip().lower().replace(" ", "-")
         source_path = pathlib.Path(self.options.get("source", "not provided"))
+        static_path = self.options.get("static", f"_static/{source_path}")
         rdf_format = self.options.get("format", "turtle")
         namespace = self.options.get("namespace", "SKOS")
 
@@ -78,8 +80,6 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
         LOG.info(f"Source: {source_path}")
         LOG.info(f"Format: {rdf_format}")
         LOG.info(f"Base URI: {base_uri}")
-
-        static_path = pathlib.Path("_static") / source_path
 
         if not source_path.is_absolute():
             source_path = self.env.srcdir / source_path
@@ -120,7 +120,7 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
             link_para = nodes.paragraph()
             link_para += nodes.Text("Source: ")
             link_para += nodes.reference(
-                refuri=static_path.as_posix(), reftitle="Source RDF", text="RDF file."
+                refuri=static_path, reftitle="Source RDF", text="RDF file."
             )
             subsection += link_para
 
