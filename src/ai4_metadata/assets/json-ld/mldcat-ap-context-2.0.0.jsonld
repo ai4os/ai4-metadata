@@ -61,8 +61,9 @@
 			"@id" : "it6:hasTaskType",
 			"@type" : "@id",
 			"@context" : {
-				"@base" : "https://api.cloud.ai4eosc.eu/v1/catalog/tasktype/",
-				"@language" : "en"
+				"@base" : "http://w3id.org/ai4os/vocabulary/tasktype/",
+				"@language" : "en",
+				"title" : "http://www.w3.org/2004/02/skos/core#prefLabel"
 			},
 			"@container" : "@set"
 		},
@@ -70,7 +71,9 @@
 			"@id" : "dct:type",
 			"@type" : "@id",
 			"@context" : {
-				"@base" : "https://api.cloud.ai4eosc.eu/v1/catalog/category/"
+				"@base" : "http://w3id.org/ai4os/vocabulary/category/",
+				"@language" : "en",
+				"title" : "http://www.w3.org/2004/02/skos/core#prefLabel"
 			},
 			"@container" : "@set"
 		},
@@ -78,7 +81,9 @@
 			"@id" : "it6:hasMachineLearningLibrary",
 			"@type" : "@id",
 			"@context" : {
-				"@base" : "https://api.cloud.ai4eosc.eu/v1/catalog/library/"
+				"@base" : "http://w3id.org/ai4os/vocabulary/library/",
+				"@language" : "en",
+				"title" : "http://purl.org/dc/terms/title"
 		   },
 			"@container" : "@set"
 		},
@@ -87,7 +92,9 @@
 			"@type" : "@id",
 			"@context" : {
 				"@base" : "http://publications.europa.eu/resource/authority/licence/",
-				"LicenseDocument": "http://purl.org/dc/terms/LicenseDocument"
+				"@language" : "en",
+				"LicenseDocument": "http://purl.org/dc/terms/LicenseDocument",
+				"title" : "http://www.w3.org/2004/02/skos/core#prefLabel"
 			}
 		},
 		"type" : "@type",
