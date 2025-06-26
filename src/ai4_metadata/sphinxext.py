@@ -222,11 +222,16 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
                 notation = entry_label.strip().replace(" ", "_")
 
             # Create a list item for each concept
-            concept_node = nodes.list_item(id=f"{notation}")
+            concept_node = nodes.list_item()
 
-            # Add raw HTML for the link
-            raw_html = f'<a href="{uri}" target="_blank">{entry_label}</a>'
-            concept_node += nodes.raw(raw_html, raw_html, format="html")
+            inline = nodes.inline()
+            inline += nodes.reference(
+                text=entry_label,
+                refuri=uri,
+                reftitle=entry_label,
+                ids=[notation],
+            )
+            concept_node += inline
 
             concept_attributes_list = nodes.bullet_list()
             for attr, values in attributes.items():
