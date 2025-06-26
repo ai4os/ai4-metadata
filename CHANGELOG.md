@@ -1,5 +1,67 @@
 # Changelog
 
+## [2.4.0](https://github.com/ai4os/ai4-metadata/compare/v2.3.1...v2.4.0) (2025-06-26)
+
+
+### Features
+
+* add SKOS ttl files ([a25e88e](https://github.com/ai4os/ai4-metadata/commit/a25e88e16fc3211b82058626fa7c226804da619e))
+* improve schema management and loading (WIP) ([08671a2](https://github.com/ai4os/ai4-metadata/commit/08671a22ba351860048b7fc649bf75a318556ec3))
+* improve testing of MLDCAT-AP profile generation ([b1d8afa](https://github.com/ai4os/ai4-metadata/commit/b1d8afa6a7743fe91358cec6f1f91662693cb1bb))
+* include initial mapping support for MLDCAT-AP ([9dc6e9c](https://github.com/ai4os/ai4-metadata/commit/9dc6e9cac3f98aad1a3c89635adc36da58b560bb))
+* include JSON-LD Context file ([c8f2fd7](https://github.com/ai4os/ai4-metadata/commit/c8f2fd75a098894a5b19d6c5bcb8e127ec460ebf))
+* include new metadata field links.self ([5043cc2](https://github.com/ai4os/ai4-metadata/commit/5043cc29a3f1be3cb9ea0fede0a609d7ed01fe2c))
+* mark the usage of "validate" as deprecated ([8183c30](https://github.com/ai4os/ai4-metadata/commit/8183c30b841d7747d64337eca219fdae56d8330c))
+* render vocabularies in docs ([c3c67df](https://github.com/ai4os/ai4-metadata/commit/c3c67df68988be88f9f42647ecefe80bd7a773c1))
+* use definitions for resource configurations ([fa9028a](https://github.com/ai4os/ai4-metadata/commit/fa9028af9b8238cb39115b94320a58e5964f97bd))
+* use versions also for JSON-LD context files ([4b706d5](https://github.com/ai4os/ai4-metadata/commit/4b706d59d5a3b42937b17f012cb583e519cce106))
+* validating multiple files (CLI) is deprecated ([aa9fe1d](https://github.com/ai4os/ai4-metadata/commit/aa9fe1d9dbb654ca3bdcd3efa6b0e6297d8d02da))
+
+
+### Bug Fixes
+
+* add ids to entries in vocabulary ([e369189](https://github.com/ai4os/ai4-metadata/commit/e3691893a233b3208177f2c7e3f20db6626c2296))
+* add RDF files links ([384c259](https://github.com/ai4os/ai4-metadata/commit/384c2595208584d2bb6897067f830ff420ebae5d))
+* build correctly source path ([48f614a](https://github.com/ai4os/ai4-metadata/commit/48f614a9cfd98f72af128f636639d616f320a755))
+* build correctly source path ([fe9c20e](https://github.com/ai4os/ai4-metadata/commit/fe9c20e715a5f535fae23b7ed0b8ad9098bf9d20))
+* change base URL to use w3id.org namespace ([a645bad](https://github.com/ai4os/ai4-metadata/commit/a645badd07d807882ff1367f362d8d067a857a3a))
+* change correct metadata schemata version ([92015b6](https://github.com/ai4os/ai4-metadata/commit/92015b6c379999b93b6b528b40eb46f809b41dce))
+* change FIXME to NOTE in comment ([ca41cd4](https://github.com/ai4os/ai4-metadata/commit/ca41cd4139510abe986bdfcf2edf8d7d52cb7938))
+* change source path for links ([87309c2](https://github.com/ai4os/ai4-metadata/commit/87309c2f81a8cb9e537df60de058cf33f4e19218))
+* convert strings into objects ([1d652b0](https://github.com/ai4os/ai4-metadata/commit/1d652b096f310b239984c9f1b8c927fd5d5dbad5))
+* correct list item IDs ([0094dd6](https://github.com/ai4os/ai4-metadata/commit/0094dd620077c695bb367585f48fb67c46ab63a8))
+* ensure that URLs do not have double slashes using ([#51](https://github.com/ai4os/ai4-metadata/issues/51)) ([eaa83ba](https://github.com/ai4os/ai4-metadata/commit/eaa83ba6af3c85e4f64ce01220913a1854cb4e53)), closes [#50](https://github.com/ai4os/ai4-metadata/issues/50)
+* explicitly set static path ([fa71f9f](https://github.com/ai4os/ai4-metadata/commit/fa71f9f5892248a22fe9dd1be6b18ae9ed2e1da1))
+* fix missing command entry points ([3cc8dad](https://github.com/ai4os/ai4-metadata/commit/3cc8dadbada749eec65cdeb19117eea5e25f8ab9))
+* fix wrong version values in enums ([5d36c91](https://github.com/ai4os/ai4-metadata/commit/5d36c9178e5fca35b1b4e542d6198aa09ecfc7fd))
+* improve package and submodule loading ([564faf2](https://github.com/ai4os/ai4-metadata/commit/564faf2a95c6f253d0b44b292d5ab8db284e8caf)), closes [#43](https://github.com/ai4os/ai4-metadata/issues/43) [#42](https://github.com/ai4os/ai4-metadata/issues/42)
+* license is not mandatory, but this does not meat it cannot be included ([e7bbdb7](https://github.com/ai4os/ai4-metadata/commit/e7bbdb798c4eb1452cafceefb4393dcf0176a865))
+* move JSON and YAML assets into src directory ([fbbe288](https://github.com/ai4os/ai4-metadata/commit/fbbe288ebbcf373b7b48e0a16de0875449d7648a))
+* remove 'en' from doc URLs ([3471a6d](https://github.com/ai4os/ai4-metadata/commit/3471a6df500230ce03f69f0fa752d8b8f36fb335))
+* remove commmented code ([868752c](https://github.com/ai4os/ai4-metadata/commit/868752c59b7ca631c33c74e03e13546e13f891e0))
+* remove non used files ([f5a7264](https://github.com/ai4os/ai4-metadata/commit/f5a7264d9d72f8ee55d13c1150247a8fb006c422))
+* return correct JSON ([c72d3d7](https://github.com/ai4os/ai4-metadata/commit/c72d3d79810755813f696cce7f7761a681fe8c56)), closes [#41](https://github.com/ai4os/ai4-metadata/issues/41)
+* take into account numbers when generating samples ([ccbaf53](https://github.com/ai4os/ai4-metadata/commit/ccbaf5354cf2a0db04f62d04aa781d7a5de8bb9a))
+* transform values into objects ([602065b](https://github.com/ai4os/ai4-metadata/commit/602065b3fd483c3c01c68944d3c4b9fd55587cb3))
+* update JSON-LD file ([8df43a1](https://github.com/ai4os/ai4-metadata/commit/8df43a1d579e5cc9d50fb904bea0e6083f206799))
+* use correct links for schema definitions ([af73827](https://github.com/ai4os/ai4-metadata/commit/af73827befd22f3f59a1b90d17fe17c8fbcc6ad1))
+* use correct static path ([32ba5dd](https://github.com/ai4os/ai4-metadata/commit/32ba5dd85f94ae9fa86c2c1ea209b83be67f6af2))
+* use correct URL for JSON-LD ([f88a3bc](https://github.com/ai4os/ai4-metadata/commit/f88a3bc939a030bcb7f45f4567782ddda0dd6d3c)), closes [#46](https://github.com/ai4os/ai4-metadata/issues/46)
+* use docutils nodes to render links ([51dc9fc](https://github.com/ai4os/ai4-metadata/commit/51dc9fc2b9b08c1d91151dbbea66ea823c69c9db))
+* use master branch for mldcat profile ([f8d291b](https://github.com/ai4os/ai4-metadata/commit/f8d291b88d9b606768bfe1aeefb2f3b789a8b977))
+* use mldcatap for profile and mldcat-ap for the command ([58816b3](https://github.com/ai4os/ai4-metadata/commit/58816b35c7f28e7735b568d27632fd948d8440d3)), closes [#47](https://github.com/ai4os/ai4-metadata/issues/47)
+* use subcommands to perform mappings ([c619dcb](https://github.com/ai4os/ai4-metadata/commit/c619dcbb88955418e393777b8c30345c10346371)), closes [#44](https://github.com/ai4os/ai4-metadata/issues/44)
+
+
+### Documentation
+
+* add correct RDT config ([8433085](https://github.com/ai4os/ai4-metadata/commit/8433085ae1e0990e86e9c0d98b220f08270fbe65))
+* add missing dependency ([e4c1135](https://github.com/ai4os/ai4-metadata/commit/e4c113590647fb63b273a424e79f2306aa9ad5df))
+* Create initial documentation and build via RTD ([f833766](https://github.com/ai4os/ai4-metadata/commit/f833766e21b9dd0c781722d0bd6963765aa5c83f))
+* include some plugin options ([237d7a8](https://github.com/ai4os/ai4-metadata/commit/237d7a83f64442cce5824df2c9f96d9ef59d267b))
+* install ai4-metadata to build docs ([9c762fb](https://github.com/ai4os/ai4-metadata/commit/9c762fb8e7d044de66e6b9daf5c87662464506f3))
+* remove wrong link ([68ebf08](https://github.com/ai4os/ai4-metadata/commit/68ebf084bbb3d9ee3ff7cf02e9681aa7e36f05f1))
+
 ## [2.3.1](https://github.com/ai4os/ai4-metadata/compare/v2.3.0...v2.3.1) (2025-03-05)
 
 
