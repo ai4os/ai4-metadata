@@ -117,9 +117,10 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
 
             link_para = nodes.paragraph()
             link_para += nodes.Text("Source: ")
-            link = f"{source_path}"
+            # Use Pathlib to join the static path with the static path
+            link = pathlib.Path("_static") / source_path
             link_para += nodes.reference(
-                refuri=link, reftitle="Source RDF", text="RDF file."
+                refuri=link.as_posix(), reftitle="Source RDF", text="RDF file."
             )
             subsection += link_para
 
