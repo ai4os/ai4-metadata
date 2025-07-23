@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/ai4os/ai4-metadata/compare/v2.4.0...v2.4.1) (2025-07-23)
+
+
+### Bug Fixes
+
+* use registry in JSON validation ([7912af2](https://github.com/ai4os/ai4-metadata/commit/7912af244a85589aafd764ca7e68734bbd0d2da6))
+
 ## [2.4.0](https://github.com/ai4os/ai4-metadata/compare/v2.3.1...v2.4.0) (2025-06-26)
 
 
