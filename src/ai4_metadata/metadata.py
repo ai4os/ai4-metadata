@@ -6,6 +6,7 @@ from typing import Union
 
 from jsonschema import validators
 import jsonschema.exceptions
+import referencing
 
 from ai4_metadata import exceptions
 from ai4_metadata import utils
@@ -96,8 +97,9 @@ def get_validator_for_schema(
         validator.check_schema(schema)
     except jsonschema.exceptions.SchemaError as e:
         raise exceptions.SchemaValidationError(schema_file, e)
-    # Now return an instance of the validator class
-    return validator(schema)
+
+    registry = referencing.Registry()
+    return validator(schema, registry=registry)
 
 
 def get_validator_for_schema_file(
