@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.4.2](https://github.com/ai4os/ai4-metadata/compare/v2.4.1...v2.4.2) (2025-11-10)
+
+
+### Bug Fixes
+
+* rename version to main ([960ec75](https://github.com/ai4os/ai4-metadata/commit/960ec75d54a1855a9b0ac9c7ed81f429c4186354))
+* restore Python 3.10 support ([#63](https://github.com/ai4os/ai4-metadata/issues/63)) ([8770e84](https://github.com/ai4os/ai4-metadata/commit/8770e847aa86675f5d9069c929f90b031780a0ea))
+* Update JSON-LD import URL for MLDCAT-AP context ([01434e1](https://github.com/ai4os/ai4-metadata/commit/01434e15bb370a2c63659ee658c445d41d469659))
+* update typer dep ([297936c](https://github.com/ai4os/ai4-metadata/commit/297936cbaf4b3423153cbba739df975f49167e71))
+
 ## [2.4.1](https://github.com/ai4os/ai4-metadata/compare/v2.4.0...v2.4.1) (2025-07-23)
 
 
