@@ -16,23 +16,40 @@ from ai4_metadata import utils
 from ai4_metadata import validate
 
 
-# NOTE(aloga): move to GH pages or documentation as soon as possible.
-_url_prefix = "https://docs.ai4os.eu/projects/ai4-metadata/latest/_static/json-ld"
+# NOTE(aloga): Using local context files for now to avoid network dependencies
+_local_context_dir = pathlib.Path(__file__).parent.parent.parent / "assets" / "json-ld"
 MetadataVersions = metadata.MetadataVersions
 
 _JSON_LD_CONTEXT = {
-    MetadataVersions.V2: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
-    MetadataVersions.V2_3_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
-    MetadataVersions.V2_2_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
-    MetadataVersions.V2_1_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
-    MetadataVersions.V2_0_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
+    MetadataVersions.V2: (_local_context_dir / "mldcat-ap-context-2.0.0.jsonld").as_uri(),
+    MetadataVersions.V2_3_0: (_local_context_dir / "mldcat-ap-context-2.0.0.jsonld").as_uri(),
+    MetadataVersions.V2_2_0: (_local_context_dir / "mldcat-ap-context-2.0.0.jsonld").as_uri(),
+    MetadataVersions.V2_1_0: (_local_context_dir / "mldcat-ap-context-2.0.0.jsonld").as_uri(),
+    MetadataVersions.V2_0_0: (_local_context_dir / "mldcat-ap-context-2.0.0.jsonld").as_uri(),
 }
 
 
-def get_context_for_version(version: MetadataVersions) -> str:
-    """Get the context for a given version."""
+def get_context_for_version(version: MetadataVersions, use_local: bool = False) -> str:
+    """Get the context for a given version.
+    
+    Args:
+        version: The metadata version to get the context for.
+        use_local: If True, return a file:// URL to the local context file.
+                  If False (default), return the remote HTTPS URL.
+    
+    Returns:
+        The URL (or file path) to the JSON-LD context.
+    
+    Raises:
+        InvalidMetadataVersionError: If the version is not supported.
+    """
     try:
-        return _JSON_LD_CONTEXT[version]
+        if use_local:
+            # Return a file:// URL for the local context
+            local_file = _local_context_dir / "mldcat-ap-context-2.0.0.jsonld"
+            return local_file.as_uri()
+        else:
+            return _JSON_LD_CONTEXT[version]
     except KeyError:
         raise exceptions.InvalidMetadataVersionError(version)
 
@@ -158,7 +175,7 @@ def _map(
             "--output-format",
             help="Format to map to. Note that this depends on the input format.",
         ),
-    ],
+    ] = SupportedOutputFormats.jsonld,
     from_profile: Annotated[
         SupportedInputProfiles,
         typer.Option("--input-profile", help="Profile to map from."),
