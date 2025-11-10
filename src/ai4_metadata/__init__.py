@@ -10,7 +10,7 @@ from . import migrate
 from . import mapping
 from . import validate
 
-__version__ = "2.4.1"
+__version__ = "2.4.2"
 
 
 def extract_version() -> str:
