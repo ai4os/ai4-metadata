@@ -73,6 +73,13 @@ def generate_mapping(from_metadata: dict) -> str:
             ET.SubElement(root, f"{{{DC}}}{name}").text = value
 
     add("title", title)
+    authors = from_metadata.get("author")
+    if authors is not None:
+        if not isinstance(authors, list):
+            raise exceptions.InvalidMappingError("author: expected a list of strings")
+        for index, author in enumerate(authors):
+            add("creator", _text(author, f"author[{index}]"))
+
     descriptions = set()
     for field in ("summary", "description"):
         value = _text(from_metadata.get(field), field)

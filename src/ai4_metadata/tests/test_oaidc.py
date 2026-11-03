@@ -21,6 +21,7 @@ def dc_metadata():
     return {
         "metadata_version": "3.0.0",
         "title": '  Módulo <modelo> & "日本語"  ',
+        "author": ["Author1", "José & María", "Author1"],
         "summary": "Summary",
         "description": "**Description**\nwith a new line",
         "tags": ["tag", "duplicate"],
@@ -62,6 +63,7 @@ def test_complete_mapping(dc_metadata):
         assert f'xmlns:{prefix}="{uri}"' in xml
     expected = [
         ("title", dc_metadata["title"]),
+        *[("creator", author) for author in dc_metadata["author"]],
         ("description", dc_metadata["summary"]),
         ("description", dc_metadata["description"]),
         *[
@@ -130,6 +132,8 @@ def test_optional_fields_and_type(kind):
         ({"summary": []}, "summary"),
         ({"description": False}, "description"),
         ({"identifier": {}}, "identifier"),
+        ({"author": "Author1"}, "author"),
+        ({"author": [123]}, "author[0]"),
         ({"tags": "tag"}, "tags"),
         ({"tasks": [1]}, "tasks[0]"),
         ({"categories": {}}, "categories"),
@@ -171,6 +175,18 @@ def test_proposed_v3_example():
     result = elements(oaidc.generate_mapping(data))
     assert result[0] == ("title", data["title"])
     assert result[-1] == ("type", "Software")
+    assert ("identifier", data["identifier"]) in result
+    assert [value for name, value in result if name == "creator"] == data["author"]
+    cli_result = runner.invoke(cli.app, ["map", "oai_dc", str(path)])
+    assert cli_result.exit_code == 0, cli_result.output
+    assert elements(cli_result.stdout) == result
+
+
+@pytest.mark.parametrize("authors", [None, [], [None, "", "  "]])
+def test_empty_authors(authors):
+    """Omit empty optional author values."""
+    result = elements(oaidc.generate_mapping({"title": "Example", "author": authors}))
+    assert result == [("title", "Example"), ("type", "Software")]
 
 
 @pytest.mark.parametrize("file_format", ["json", "yaml"])
