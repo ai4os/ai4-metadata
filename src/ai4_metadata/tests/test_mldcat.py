@@ -6,6 +6,7 @@ import pyld
 import pytest
 import rdflib
 import requests
+from rdflib.compare import isomorphic
 
 from ai4_metadata import exceptions
 from ai4_metadata import metadata
@@ -44,6 +45,7 @@ def test_context_is_valid_json():
         assert pyld.jsonld.expand(response.json()) is not None
 
 
+@pytest.mark.usefixtures("local_mldcat_context")
 def test_generate_jsonld_mapping(valid_instances):
     """Test the generation of a mapping file in JSON-LD."""
     profile = mldcatap.SupportedInputProfiles.ai4os
@@ -57,6 +59,7 @@ def test_generate_jsonld_mapping(valid_instances):
         assert pyld.jsonld.expand(jsonld) is not None
 
 
+@pytest.mark.usefixtures("local_mldcat_context")
 def test_generate_rdf_mapping(valid_instances):
     """Test the generation of a mapping file in RDF."""
     profile = mldcatap.SupportedInputProfiles.ai4os
@@ -68,6 +71,43 @@ def test_generate_rdf_mapping(valid_instances):
         assert mapping is not None
         assert isinstance(mapping, str)
         assert g.parse(data=mapping, format="ttl") is not None
+
+
+@pytest.mark.usefixtures("local_mldcat_context")
+def test_generate_xml_mapping(valid_instances):
+    """RDF/XML preserves the same graph as Turtle for each valid instance."""
+    for instance in valid_instances:
+        xml = mldcatap.generate_mapping(
+            mldcatap.SupportedInputProfiles.ai4os,
+            instance,
+            mldcatap.SupportedOutputFormats.xml,
+        )
+        turtle = mldcatap.generate_mapping(
+            mldcatap.SupportedInputProfiles.ai4os,
+            instance,
+            mldcatap.SupportedOutputFormats.ttl,
+        )
+        assert isinstance(xml, str)
+        xml_graph = rdflib.Graph().parse(data=xml, format="xml")
+        turtle_graph = rdflib.Graph().parse(data=turtle, format="turtle")
+        assert len(xml_graph) > 0
+        assert isomorphic(xml_graph, turtle_graph)
+
+
+@pytest.mark.usefixtures("local_mldcat_context")
+def test_xml_preserves_special_characters(valid_instances):
+    """Unicode and XML-sensitive characters survive an RDF/XML round trip."""
+    title = 'Clasificación <modelo> & "datos" — 日本語'
+    instance = {**valid_instances[0], "title": title}
+    xml = mldcatap.generate_mapping(
+        mldcatap.SupportedInputProfiles.ai4os,
+        instance,
+        mldcatap.SupportedOutputFormats.xml,
+    )
+    graph = rdflib.Graph().parse(data=xml, format="xml")
+    assert rdflib.Literal(title, lang="en") in graph.objects(
+        predicate=rdflib.URIRef("http://purl.org/dc/terms/title")
+    )
 
 
 def test_invalid_mapping():

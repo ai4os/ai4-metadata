@@ -21,7 +21,7 @@ def generate(
     required_only: bool = False,
 ) -> collections.OrderedDict:
     """Generate an AI4 metadata schema empty of with samples."""
-    properties = schema.get("properties", {})
+    properties = dict(schema.get("properties", {}))
     required = schema.get("required", [])
 
     if required_only:
@@ -38,13 +38,27 @@ def generate(
     generated_json["metadata_version"] = version
 
     for key, value in properties.items():
-        generated_json[key] = _get_field_value(value, sample_values)
+        generated_json[key] = _get_field_value(value, sample_values, schema)
 
     return generated_json
 
 
-def _get_field_value(value: dict, sample_values: bool = False) -> Any:
+def _get_field_value(
+    value: dict, sample_values: bool = False, schema: Optional[dict] = None
+) -> Any:
     """Get the value of a field based on its type definition."""
+    if "$ref" in value:
+        reference = value["$ref"]
+        if schema is None or not reference.startswith("#/"):
+            raise exceptions.InvalidSchemaError(
+                "no-file", f"Unsupported schema reference: {reference}"
+            )
+        resolved = schema
+        for part in reference[2:].split("/"):
+            resolved = resolved[part.replace("~1", "/").replace("~0", "~")]
+        value = {**resolved, **{k: v for k, v in value.items() if k != "$ref"}}
+        return _get_field_value(value, sample_values, schema)
+
     # Get the field type, default to string if not specified
     field_type = value.get("type", "string")
 
@@ -59,7 +73,7 @@ def _get_field_value(value: dict, sample_values: bool = False) -> Any:
 
         # Process each property
         for key, prop in properties.items():
-            result[key] = _get_field_value(prop, sample_values)
+            result[key] = _get_field_value(prop, sample_values, schema)
         return result
 
     elif field_type == "array":

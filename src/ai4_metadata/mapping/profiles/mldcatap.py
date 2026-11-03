@@ -47,10 +47,11 @@ class SupportedInputProfiles(str, enum.Enum):
 
 
 class SupportedOutputFormats(str, enum.Enum):
-    """Supported input formats for crosswalks."""
+    """Supported output formats for crosswalks."""
 
     jsonld = "jsonld"
     ttl = "ttl"
+    xml = "xml"
 
 
 def generate_mapping(
@@ -96,11 +97,11 @@ def generate_mapping(
             "type": "LicenseDocument",
         }
 
-    if to_format == SupportedOutputFormats.ttl:
+    if to_format in (SupportedOutputFormats.ttl, SupportedOutputFormats.xml):
         graph = rdflib.Graph()
         graph.parse(data=json.dumps(new_meta), format="json-ld")
-        turtle_data = graph.serialize(format="turtle")
-        return str(turtle_data)
+        rdf_format = "turtle" if to_format == SupportedOutputFormats.ttl else "xml"
+        return str(graph.serialize(format=rdf_format))
     else:
         return json.dumps(new_meta)
 

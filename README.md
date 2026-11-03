@@ -82,12 +82,13 @@ use of [DCAT Aplication Profile](https://interoperable-europe.ec.europa.eu/colle
 for data portals in Europe.
 
 In order to map the `ai4` metadata into the MLDCAT-AP profile you can use the
-`ai4-metadata map mldcat` subcommand. The input metadata file must be in the
+`ai4-metadata map mldcat-ap` subcommand. The input metadata file must be in the
 `ai4` metadata format (YAML or JSON). You can specify what format the metadata
-should be rendered into, either JSON-LD (`jsonld`) or RD Turtle (`ttl`).
+should be rendered into: JSON-LD (`jsonld`), RDF Turtle (`ttl`), or RDF/XML (`xml`).
 
-    $ ai4-metadata map mldcat src/assets/examples/sample-v2.mods.json --output-format jsonld --output sample-v2.mldcat.jsonld
-    $ ai4-metadata map mldcat src/assets/examples/sample-v2.mods.json --output-format ttl --output sample-v2.mldcat.ttl
+    $ ai4-metadata map mldcat-ap src/ai4_metadata/assets/examples/sample-v2.mods.json --output-format jsonld --output sample-v2.mldcat.jsonld
+    $ ai4-metadata map mldcat-ap src/ai4_metadata/assets/examples/sample-v2.mods.json --output-format ttl --output sample-v2.mldcat.ttl
+    $ ai4-metadata map mldcat-ap src/ai4_metadata/assets/examples/sample-v2.mods.json --output-format xml --output sample-v2.mldcat.xml
 
 ### Metadata migration
 

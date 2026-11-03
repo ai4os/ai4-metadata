@@ -1,14 +1,39 @@
 """Fixtures for the tests."""
 
 import pathlib
+import json
 
 import pytest
 
 from ai4_metadata import utils
+from ai4_metadata.mapping.profiles import mldcatap
 
 
 SCHEMATA_DIR = pathlib.Path(__file__).parent / "../assets/schemata/"
 INSTANCES_DIR = pathlib.Path(__file__).parent / "../assets/examples/"
+
+
+@pytest.fixture
+def local_mldcat_context(monkeypatch):
+    """Use the bundled context with local imported classes for serialization tests."""
+    context_file = SCHEMATA_DIR.parent / "json-ld/mldcat-ap-context-2.0.0.jsonld"
+    context = json.loads(context_file.read_text(encoding="utf-8"))["@context"]
+    # Only these imported classes are emitted by the mapper. Keep their definitions
+    # from the MLDCAT-AP 2.1.0 context local, so tests never fetch its @import URL.
+    context.pop("@import")
+    imported_classes = {
+        "MachineLearningModel": "http://data.europa.eu/it6/MachineLearningModel",
+        "Repository": "https://linkedpaperswithcode.com/class/repository",
+        "Dataset": "http://www.w3.org/ns/dcat#Dataset",
+        "Concept": "http://www.w3.org/2004/02/skos/core#Concept",
+        "TaskType": "http://data.europa.eu/it6/TaskType",
+        "Library": "http://data.europa.eu/it6/Library",
+    }
+    monkeypatch.setattr(
+        mldcatap,
+        "get_context_for_version",
+        lambda version: {**imported_classes, **context},
+    )
 
 
 @pytest.fixture(scope="module")

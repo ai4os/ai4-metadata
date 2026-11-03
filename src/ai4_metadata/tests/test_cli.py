@@ -2,6 +2,8 @@
 
 import itertools
 
+import pytest
+import rdflib
 import typer.testing
 
 import ai4_metadata
@@ -97,9 +99,10 @@ def test_version():
 # MLDCAT-AP
 
 
+@pytest.mark.usefixtures("local_mldcat_context")
 def test_mldcat_app_generate_mapping(valid_instance_files):
     """Test the CLI with a valid instance."""
-    formats = ["jsonld", "ttl"]
+    formats = ["jsonld", "ttl", "xml"]
     for aux_file, output in itertools.product(valid_instance_files, formats):
         result = runner.invoke(
             app,
@@ -112,6 +115,44 @@ def test_mldcat_app_generate_mapping(valid_instance_files):
             ],
         )
         assert result.exit_code == 0
+        if output == "xml":
+            assert len(rdflib.Graph().parse(data=result.stdout, format="xml")) > 0
+
+
+@pytest.mark.usefixtures("local_mldcat_context")
+def test_mldcat_app_xml_file(valid_instance_files, tmp_path):
+    """The CLI writes a valid UTF-8 RDF/XML file."""
+    output = tmp_path / "metadata.xml"
+    result = runner.invoke(
+        app,
+        [
+            "map",
+            "mldcat-ap",
+            valid_instance_files[0].as_posix(),
+            "--output-format",
+            "xml",
+            "--output",
+            str(output),
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert not result.stdout
+    assert len(rdflib.Graph().parse(data=output.read_text("utf-8"), format="xml")) > 0
+
+
+def test_mldcat_app_invalid_output_format(valid_instance_files):
+    """The CLI rejects unsupported output formats."""
+    result = runner.invoke(
+        app,
+        [
+            "map",
+            "mldcat-ap",
+            valid_instance_files[0].as_posix(),
+            "--output-format",
+            "invalid_format",
+        ],
+    )
+    assert result.exit_code == 2
 
 
 def test_mldcat_app_invalid_metadata(invalid_instance_files):
