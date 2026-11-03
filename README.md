@@ -90,6 +90,16 @@ should be rendered into: JSON-LD (`jsonld`), RDF Turtle (`ttl`), or RDF/XML (`xm
     $ ai4-metadata map mldcat-ap src/ai4_metadata/assets/examples/sample-v2.mods.json --output-format ttl --output sample-v2.mldcat.ttl
     $ ai4-metadata map mldcat-ap src/ai4_metadata/assets/examples/sample-v2.mods.json --output-format xml --output sample-v2.mldcat.xml
 
+#### OAI Dublin Core profile
+
+The `oai_dc` profile maps AI4OS metadata in JSON or YAML format to an OAI Dublin
+Core XML document:
+
+    $ ai4-metadata map oai_dc src/ai4_metadata/assets/examples/sample-v2.mods.json --output sample-v2.oai_dc.xml
+
+XML is the default and only supported output format. Omit `--output` to print
+the result to stdout.
+
 ### Metadata migration
 
 The metadata utilities provide a subcommand `ai4-metadata migrate` that can be
