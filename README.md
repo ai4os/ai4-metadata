@@ -82,12 +82,47 @@ use of [DCAT Aplication Profile](https://interoperable-europe.ec.europa.eu/colle
 for data portals in Europe.
 
 In order to map the `ai4` metadata into the MLDCAT-AP profile you can use the
-`ai4-metadata map mldcat` subcommand. The input metadata file must be in the
+`ai4-metadata map mldcat-ap` subcommand. The input metadata file must be in the
 `ai4` metadata format (YAML or JSON). You can specify what format the metadata
-should be rendered into, either JSON-LD (`jsonld`) or RD Turtle (`ttl`).
+should be rendered into, either JSON-LD (`jsonld`) or RDF Turtle (`ttl`).
 
-    $ ai4-metadata map mldcat src/assets/examples/sample-v2.mods.json --output-format jsonld --output sample-v2.mldcat.jsonld
-    $ ai4-metadata map mldcat src/assets/examples/sample-v2.mods.json --output-format ttl --output sample-v2.mldcat.ttl
+    $ ai4-metadata map mldcat-ap src/assets/examples/sample-v2.mods.json --output-format jsonld --output sample-v2.mldcat.jsonld
+    $ ai4-metadata map mldcat-ap src/assets/examples/sample-v2.mods.json --output-format ttl --output sample-v2.mldcat.ttl
+
+The JSON-LD contexts needed to render the RDF output are bundled with the
+package, so no network access is needed.
+
+#### SHACL validation (optional)
+
+The generated mapping can be validated against the official
+[MLDCAT-AP 2.1.0 SHACL shapes](https://semiceu.github.io/MLDCAT-AP/releases/2.1.0/),
+which are bundled with the package. This requires the optional `shacl` extra,
+which installs [pySHACL](https://github.com/RDFLib/pySHACL):
+
+    $ pip install 'ai4-metadata[shacl]'
+
+Then, use the `--shacl` option when mapping:
+
+    $ ai4-metadata map mldcat-ap src/assets/examples/sample-v2.mods.json --output-format ttl --shacl
+
+If the mapping does not conform to the shapes, the SHACL validation report is
+printed, nothing is written and the command exits with code `1`. If the `shacl`
+extra is not installed, the command exits with code `5`.
+
+The same validation is available from Python:
+
+```python
+from ai4_metadata import metadata, utils
+from ai4_metadata.mapping import registry
+
+profile = registry.get_profile("mldcat-ap")
+document = profile.to_jsonld(
+    utils.load_file("sample-v2.mods.json"), metadata.MetadataVersions.V2
+)
+report = profile.validate_shacl(document)
+print(report.conforms)
+print(report.text)
+```
 
 ### Metadata migration
 
