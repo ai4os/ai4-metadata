@@ -69,18 +69,13 @@ A profile is a way of describing a module with metadata. Two profiles are
 supported:
 
 AI4 metadata (``ai4os``)
-   Our own metadata profile, used by the AI4OS hub modules. It is defined by a
-   versioned JSON Schema (see :doc:`assets`), and files are written in JSON or YAML
-   (see :doc:`examples`). This is the profile used as input by all the commands.
+   Our own metadata profile, in JSON or YAML. It is the input of all the commands.
 
 MLDCAT-AP (``mldcat-ap``)
-   An output profile, defined by `SEMIC
-   <https://interoperable-europe.ec.europa.eu/collection/semic-support-centre>`_,
-   that extends `DCAT-AP
-   <https://interoperable-europe.ec.europa.eu/collection/semic-support-centre/solution/dcat-application-profile-data-portals-europe>`_
-   to describe machine learning models. It is linked data (RDF), so it can be
-   rendered as JSON-LD or Turtle and validated with its official SHACL shapes. AI4
-   metadata is converted into it with the ``map mldcat-ap`` command.
+   An output profile to describe machine learning models as linked data, rendered
+   as JSON-LD or Turtle.
+
+See :doc:`profiles` for more details.
 
 Map metadata to other profiles
 ------------------------------

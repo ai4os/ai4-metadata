@@ -12,6 +12,7 @@ Work in progress...
    :caption: Usage:
 
    cli.rst
+   profiles.rst
 
 .. toctree::
    :maxdepth: 2
