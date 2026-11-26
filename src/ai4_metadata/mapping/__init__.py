@@ -1,6 +1,5 @@
 """Module for mapping metadata between different formats."""
 
-import enum
 import pathlib
 from typing import Optional
 
@@ -16,12 +15,6 @@ from ai4_metadata.mapping.profiles import base
 from ai4_metadata.mapping.profiles import mldcatap
 
 app = typer.Typer(help="Crosswalk between different metadata profiles and formats.")
-
-
-class SupportedOutputProfiles(str, enum.Enum):
-    """Supported output profiles for crosswalks."""
-
-    mldcatap = mldcatap
 
 
 def map_file(
@@ -130,4 +123,4 @@ def _map_mldcatap(
     )
 
 
-__all__ = ["app", "map_file", "mldcatap", "registry", "SupportedOutputProfiles"]
+__all__ = ["app", "map_file", "mldcatap", "registry"]
