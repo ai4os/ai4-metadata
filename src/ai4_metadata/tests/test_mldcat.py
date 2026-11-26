@@ -84,3 +84,20 @@ def test_invalid_output_format(valid_instances):
         mldcatap.generate_mapping(
             mldcatap.SupportedInputProfiles.ai4os, valid_instances[0], "invalid_format"
         )
+
+
+def test_profile_to_jsonld(valid_instances):
+    """Test that the profile maps AI4 metadata into a JSON-LD document."""
+    version = metadata.MetadataVersions.V2
+    for instance in valid_instances:
+        document = mldcatap.PROFILE.to_jsonld(instance, version)
+        assert document["@context"] == mldcatap.get_context_for_version(version)
+        assert document["type"] == "MachineLearningModel"
+
+
+def test_profile_does_not_modify_input(valid_instances):
+    """Test that the profile does not modify the input metadata."""
+    for instance in valid_instances:
+        original = json.loads(json.dumps(instance))
+        mldcatap.PROFILE.to_jsonld(instance, metadata.MetadataVersions.V2)
+        assert instance == original
