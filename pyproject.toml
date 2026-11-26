@@ -41,6 +41,10 @@ rfc3987 = "^1.3.8"
 typer = "^0.20.0"
 pyyaml = "^6.0.2"
 rdflib = "^7.1.3"
+pyshacl = { version = ">=0.40.2,<1", optional = true }
+
+[tool.poetry.extras]
+shacl = ["pyshacl"]
 
 [tool.poetry.group.dev.dependencies]
 tox = "^4.17.1"
@@ -79,7 +83,7 @@ types-docutils = "^0.21.0.20250604"
 
 
 [tool.poetry.group.test-pip-missing-reqs.dependencies]
-pip-check-reqs = "^2.5.3"
+pip-check-reqs = "^3.1.0"
 poetry-plugin-export = "^1.8.0"
 
 

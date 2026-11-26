@@ -21,11 +21,11 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
 
-ai4eosc-library:Pytorch a it6:Library;
-  dct:title "Pytorch"@en .
+ai4eosc-library:PyTorch a it6:Library;
+  dct:title "PyTorch"@en .
 
 ai4eosc-library:Keras a it6:Library;
   dct:title "Keras"@en .
 
-ai4eosc-library:Tensorflow a it6:Library;
-  dct:title "Tensorflow"@en .
+ai4eosc-library:TensorFlow a it6:Library;
+  dct:title "TensorFlow"@en .

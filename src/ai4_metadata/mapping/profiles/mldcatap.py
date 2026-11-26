@@ -1,19 +1,12 @@
 """Module to generate mappings from AI4OS metadata to MLDCAT-API."""
 
 import copy
-import enum
-import json
 import pathlib
-from typing_extensions import Annotated
-from typing import Optional, Union
-
-import typer
-import rdflib
+from typing import Union
 
 from ai4_metadata import metadata
 from ai4_metadata import exceptions
-from ai4_metadata import utils
-from ai4_metadata import validate
+from ai4_metadata.mapping.profiles import base
 
 
 # NOTE(aloga): move to GH pages or documentation as soon as possible.
@@ -29,6 +22,20 @@ _JSON_LD_CONTEXT = {
 }
 
 
+_ASSETS_DIR = pathlib.Path(__file__).parent / "../../assets"
+
+# NOTE(aloga): bundled copies of the contexts above, and of the MLDCAT-AP context they
+# import, so that we can build RDF graphs without network access.
+_LOCAL_CONTEXTS = {
+    f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld": (
+        _ASSETS_DIR / "json-ld/mldcat-ap-context-2.0.0.jsonld"
+    ),
+    "https://semiceu.github.io/MLDCAT-AP/releases/2.1.0/context/mldcat-ap.jsonld": (
+        _ASSETS_DIR / "json-ld/semic/mldcat-ap-2.1.0.jsonld"
+    ),
+}
+
+
 def get_context_for_version(version: MetadataVersions) -> str:
     """Get the context for a given version."""
     try:
@@ -37,20 +44,54 @@ def get_context_for_version(version: MetadataVersions) -> str:
         raise exceptions.InvalidMetadataVersionError(version)
 
 
-app = typer.Typer(help="Support for mapping into MLDCAT-AP profile.")
+# NOTE(aloga): kept as module level names for backwards compatibility.
+SupportedInputProfiles = base.SupportedInputProfiles
+SupportedOutputFormats = base.SupportedOutputFormats
 
 
-class SupportedInputProfiles(str, enum.Enum):
-    """Supported input profiles for crosswalks."""
+class MLDCATAPProfile(base.Profile):
+    """MLDCAT-AP output profile."""
 
-    ai4os = "ai4os"
+    name = "mldcat-ap"
+    description = "Map to MLDCAT-AP profile, with different renderings."
+    output_formats = (SupportedOutputFormats.jsonld, SupportedOutputFormats.ttl)
+    local_contexts = _LOCAL_CONTEXTS
+    shapes_file = _ASSETS_DIR / "shacl/semic/mldcat-ap-2.1.0-SHACL.ttl"
+
+    def to_jsonld(
+        self, from_metadata: dict, metadata_version: MetadataVersions
+    ) -> dict:
+        """Map AI4 metadata into an MLDCAT-AP JSON-LD document."""
+        uri = from_metadata.get("links", {}).get("self", "")
+        if not uri:
+            uri = from_metadata.get("links", {}).get("source_code", "")
+
+        new_meta = copy.deepcopy(from_metadata)
+        new_meta["@context"] = get_context_for_version(metadata_version)
+        new_meta["uri"] = uri
+        new_meta["type"] = "MachineLearningModel"
+
+        links = new_meta.pop("links", {})
+        new_meta["links"] = {}
+        for key, value in links.items():
+            new_meta["links"][key] = format_link(key, value)
+
+        for key in ["categories", "tasks", "libraries"]:
+            old_meta = new_meta.pop(key, [])
+            new_meta[key] = [as_object(cat, key) for cat in old_meta]
+
+        license_ = new_meta.pop("license", None)
+        if license_:
+            new_meta["license"] = {
+                "uri": license_.replace(" ", "_"),
+                "title": license_,
+                "type": "LicenseDocument",
+            }
+
+        return new_meta
 
 
-class SupportedOutputFormats(str, enum.Enum):
-    """Supported input formats for crosswalks."""
-
-    jsonld = "jsonld"
-    ttl = "ttl"
+PROFILE = MLDCATAPProfile()
 
 
 def generate_mapping(
@@ -70,39 +111,8 @@ def generate_mapping(
             msg=f"output format `{to_format}` not supported for MLDCAT-API profile."
         )
 
-    uri = from_metadata.get("links", {}).get("self", "")
-    if not uri:
-        uri = from_metadata.get("links", {}).get("source_code", "")
-
-    new_meta = copy.deepcopy(from_metadata)
-    new_meta["@context"] = get_context_for_version(metadata_version)
-    new_meta["uri"] = uri
-    new_meta["type"] = "MachineLearningModel"
-
-    links = new_meta.pop("links", {})
-    new_meta["links"] = {}
-    for key, value in links.items():
-        new_meta["links"][key] = format_link(key, value)
-
-    for key in ["categories", "tasks", "libraries"]:
-        old_meta = new_meta.pop(key, [])
-        new_meta[key] = [as_object(cat, key) for cat in old_meta]
-
-    license_ = new_meta.pop("license", None)
-    if license_:
-        new_meta["license"] = {
-            "uri": license_.replace(" ", "_"),
-            "title": license_,
-            "type": "LicenseDocument",
-        }
-
-    if to_format == SupportedOutputFormats.ttl:
-        graph = rdflib.Graph()
-        graph.parse(data=json.dumps(new_meta), format="json-ld")
-        turtle_data = graph.serialize(format="turtle")
-        return str(turtle_data)
-    else:
-        return json.dumps(new_meta)
+    document = PROFILE.to_jsonld(from_metadata, metadata_version)
+    return PROFILE.serialize(document, to_format)
 
 
 def format_link(key: str, value: str) -> Union[str, dict]:
@@ -142,65 +152,3 @@ def as_object(object_name: str, object_category: str) -> dict:
         "title": object_name,
         "type": object_type_map.get(object_category, "Concept"),
     }
-
-
-@app.command(
-    name="mldcat-ap", help="Map to MLDCAT-AP profile, with different renderings."
-)
-def _map(
-    from_file: Annotated[
-        pathlib.Path,
-        typer.Argument(help="File to map from."),
-    ],
-    to_format: Annotated[
-        SupportedOutputFormats,
-        typer.Option(
-            "--output-format",
-            help="Format to map to. Note that this depends on the input format.",
-        ),
-    ],
-    from_profile: Annotated[
-        SupportedInputProfiles,
-        typer.Option("--input-profile", help="Profile to map from."),
-    ] = SupportedInputProfiles.ai4os,
-    output: Annotated[
-        Optional[pathlib.Path],
-        typer.Option("--output", "-o", help="Output file for generated mapping."),
-    ] = None,
-    metadata_version: Annotated[
-        Optional[metadata.MetadataVersions],
-        typer.Option(help="AI4 application metadata version. Defaults to the latest."),
-    ] = None,
-) -> None:
-    """Generate a mapping file between two formats."""
-    if metadata_version is None:
-        metadata_version = metadata.get_latest_version()
-    schema = metadata.get_schema(metadata_version)
-
-    try:
-        validate.validate(from_file, schema)
-    except exceptions.MetadataValidationError as e:
-        utils.format_rich_error(e)
-        raise typer.Exit(1)
-    except Exception as e:
-        utils.format_rich_error(e)
-        raise typer.Exit(4)
-
-    from_metadata = utils.load_file(from_file)
-
-    try:
-        mapping = generate_mapping(
-            from_profile=from_profile,
-            from_metadata=from_metadata,
-            to_format=to_format,
-            metadata_version=metadata_version,
-        )
-    except exceptions.InvalidMappingError as e:
-        utils.format_rich_error(e)
-        raise typer.Exit(1)
-
-    if output:
-        with open(output, "wb") as f:
-            f.write(mapping.encode("utf-8"))
-    else:
-        typer.echo(mapping)

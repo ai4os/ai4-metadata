@@ -5,6 +5,7 @@ import pathlib
 import typing
 
 import jsonschema.exceptions
+import rich.markup
 
 
 class BaseExceptionError(Exception):
@@ -126,3 +127,31 @@ class InvalidMappingError(BaseExceptionError):
         """Initialize the exception."""
         self.msg = msg
         super().__init__(self.message.format(msg=msg))
+
+
+class ShaclNotAvailableError(BaseExceptionError):
+    """Exception raised when SHACL validation is requested but not installed."""
+
+    message = (
+        "SHACL validation requires the optional 'shacl' extra, install it with "
+        "'pip install ai4-metadata\\[shacl]'."
+    )
+
+    def __init__(self):
+        """Initialize the exception."""
+        super().__init__(self.message)
+
+
+class ShaclValidationError(BaseExceptionError):
+    """Exception raised when a mapping does not conform to its SHACL shapes."""
+
+    message = "Mapping does not conform to the '{profile}' SHACL shapes:\n{report}"
+
+    def __init__(self, profile: str, report: str):
+        """Initialize the exception."""
+        self.profile = profile
+        self.report = report
+        # NOTE(aloga): escape the report, as it is printed using rich markup.
+        super().__init__(
+            self.message.format(profile=profile, report=rich.markup.escape(report))
+        )

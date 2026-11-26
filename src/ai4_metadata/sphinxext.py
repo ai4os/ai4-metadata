@@ -36,13 +36,15 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
     """Sphinx directive to include a vocabulary.
 
     Usage:
-    .. skos-vocabulary:: vocabulary_name
+    .. rdf-vocabulary:: vocabulary_name
        :source: path/to/rdf/file.ttl
        :format: turtle
        :namespace: SKOS
+
+       Optional text describing the vocabulary, shown below the title.
     """
 
-    has_content = False
+    has_content = True
     required_arguments = 1  # vocabulary name
     optional_arguments = 0
     final_argument_whitespace = True
@@ -100,6 +102,10 @@ class VocabularyDirective(sphinx.util.docutils.SphinxDirective):
             title_text = f"{vocabulary_name}"
             title = nodes.title(title_text, title_text)
             section += title
+
+            # Add the optional description given as the directive content
+            if self.content:
+                self.state.nested_parse(self.content, self.content_offset, section)
 
             # Add a subsection with H2 title
             subsection = nodes.section(ids=[f"{section_id}-details"])
