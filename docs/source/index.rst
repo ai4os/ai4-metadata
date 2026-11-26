@@ -9,6 +9,12 @@ Work in progress...
 
 .. toctree::
    :maxdepth: 2
+   :caption: Usage:
+
+   cli.rst
+
+.. toctree::
+   :maxdepth: 2
    :caption: Assets:
 
    assets.rst
