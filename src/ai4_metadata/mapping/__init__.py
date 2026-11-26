@@ -30,8 +30,16 @@ def map_file(
     to_format: base.SupportedOutputFormats,
     output: Optional[pathlib.Path],
     metadata_version: Optional[metadata.MetadataVersions],
+    validate_shacl: bool = False,
 ) -> None:
-    """Validate an AI4 metadata file, map it into a profile and write the result."""
+    """Validate an AI4 metadata file, map it into a profile and write the result.
+
+    If ``validate_shacl`` is set, the mapping is also validated against the profile
+    SHACL shapes, and nothing is written if it does not conform.
+
+    Exit codes: 1 if the metadata or the mapping are not valid, 4 on unexpected
+    errors, 5 if SHACL validation is requested but pySHACL is not installed.
+    """
     if metadata_version is None:
         metadata_version = metadata.get_latest_version()
     schema = metadata.get_schema(metadata_version)
@@ -55,6 +63,19 @@ def map_file(
 
     from_metadata = utils.load_file(from_file)
     document = profile.to_jsonld(from_metadata, metadata_version)
+
+    if validate_shacl:
+        try:
+            report = profile.validate_shacl(document)
+        except exceptions.ShaclNotAvailableError as e:
+            utils.format_rich_error(e)
+            raise typer.Exit(5)
+        if not report.conforms:
+            utils.format_rich_error(
+                exceptions.ShaclValidationError(profile.name, report.text)
+            )
+            raise typer.Exit(1)
+
     mapping = profile.serialize(document, to_format)
 
     if output:
@@ -89,6 +110,14 @@ def _map_mldcatap(
         Optional[metadata.MetadataVersions],
         typer.Option(help="AI4 application metadata version. Defaults to the latest."),
     ] = None,
+    validate_shacl: Annotated[
+        bool,
+        typer.Option(
+            "--shacl",
+            help="Validate the mapping against the MLDCAT-AP SHACL shapes. Requires "
+            "the optional 'shacl' extra to be installed.",
+        ),
+    ] = False,
 ) -> None:
     """Map an AI4 metadata file into the MLDCAT-AP profile."""
     map_file(
@@ -97,6 +126,7 @@ def _map_mldcatap(
         to_format,
         output,
         metadata_version,
+        validate_shacl,
     )
 
 

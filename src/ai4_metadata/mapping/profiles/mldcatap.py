@@ -22,16 +22,16 @@ _JSON_LD_CONTEXT = {
 }
 
 
-_ASSETS_DIR = pathlib.Path(__file__).parent / "../../assets/json-ld"
+_ASSETS_DIR = pathlib.Path(__file__).parent / "../../assets"
 
 # NOTE(aloga): bundled copies of the contexts above, and of the MLDCAT-AP context they
 # import, so that we can build RDF graphs without network access.
 _LOCAL_CONTEXTS = {
     f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld": (
-        _ASSETS_DIR / "mldcat-ap-context-2.0.0.jsonld"
+        _ASSETS_DIR / "json-ld/mldcat-ap-context-2.0.0.jsonld"
     ),
     "https://semiceu.github.io/MLDCAT-AP/releases/2.1.0/context/mldcat-ap.jsonld": (
-        _ASSETS_DIR / "semic/mldcat-ap-2.1.0.jsonld"
+        _ASSETS_DIR / "json-ld/semic/mldcat-ap-2.1.0.jsonld"
     ),
 }
 
@@ -56,6 +56,7 @@ class MLDCATAPProfile(base.Profile):
     description = "Map to MLDCAT-AP profile, with different renderings."
     output_formats = (SupportedOutputFormats.jsonld, SupportedOutputFormats.ttl)
     local_contexts = _LOCAL_CONTEXTS
+    shapes_file = _ASSETS_DIR / "shacl/semic/mldcat-ap-2.1.0-SHACL.ttl"
 
     def to_jsonld(
         self, from_metadata: dict, metadata_version: MetadataVersions

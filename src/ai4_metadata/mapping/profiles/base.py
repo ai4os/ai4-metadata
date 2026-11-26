@@ -4,12 +4,13 @@ import abc
 import enum
 import json
 import pathlib
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import rdflib
 
 from ai4_metadata import exceptions
 from ai4_metadata import metadata
+from ai4_metadata import shacl
 from ai4_metadata import utils
 
 
@@ -42,6 +43,8 @@ class Profile(abc.ABC):
     #: Bundled copies of the remote JSON-LD contexts used by this profile, as a
     #: mapping of context URL to local file. Used to build RDF graphs offline.
     local_contexts: Dict[str, pathlib.Path]
+    #: Turtle file with the SHACL shapes of the profile, if any.
+    shapes_file: Optional[pathlib.Path]
 
     @abc.abstractmethod
     def to_jsonld(
@@ -67,6 +70,18 @@ class Profile(abc.ABC):
         graph = rdflib.Graph()
         graph.parse(data=json.dumps(document), format="json-ld")
         return graph
+
+    def validate_shacl(self, document: dict) -> shacl.ValidationReport:
+        """Validate a JSON-LD document produced by this profile with its SHACL shapes.
+
+        :raises InvalidMappingError: If the profile does not define SHACL shapes.
+        :raises ShaclNotAvailableError: If pySHACL is not installed.
+        """
+        if self.shapes_file is None:
+            raise exceptions.InvalidMappingError(
+                msg=f"profile `{self.name}` does not define SHACL shapes."
+            )
+        return shacl.validate_graph(self.to_graph(document), self.shapes_file)
 
     def serialize(self, document: dict, to_format: SupportedOutputFormats) -> str:
         """Render a JSON-LD document produced by this profile into ``to_format``."""
