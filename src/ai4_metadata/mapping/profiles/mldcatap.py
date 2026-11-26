@@ -1,6 +1,7 @@
 """Module to generate mappings from AI4OS metadata to MLDCAT-API."""
 
 import copy
+import pathlib
 from typing import Union
 
 from ai4_metadata import metadata
@@ -18,6 +19,20 @@ _JSON_LD_CONTEXT = {
     MetadataVersions.V2_2_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
     MetadataVersions.V2_1_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
     MetadataVersions.V2_0_0: f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld",
+}
+
+
+_ASSETS_DIR = pathlib.Path(__file__).parent / "../../assets/json-ld"
+
+# NOTE(aloga): bundled copies of the contexts above, and of the MLDCAT-AP context they
+# import, so that we can build RDF graphs without network access.
+_LOCAL_CONTEXTS = {
+    f"{_url_prefix}/mldcat-ap-context-2.0.0.jsonld": (
+        _ASSETS_DIR / "mldcat-ap-context-2.0.0.jsonld"
+    ),
+    "https://semiceu.github.io/MLDCAT-AP/releases/2.1.0/context/mldcat-ap.jsonld": (
+        _ASSETS_DIR / "semic/mldcat-ap-2.1.0.jsonld"
+    ),
 }
 
 
@@ -40,6 +55,7 @@ class MLDCATAPProfile(base.Profile):
     name = "mldcat-ap"
     description = "Map to MLDCAT-AP profile, with different renderings."
     output_formats = (SupportedOutputFormats.jsonld, SupportedOutputFormats.ttl)
+    local_contexts = _LOCAL_CONTEXTS
 
     def to_jsonld(
         self, from_metadata: dict, metadata_version: MetadataVersions
